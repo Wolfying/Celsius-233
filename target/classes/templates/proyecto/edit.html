@@ -1,0 +1,45 @@
+<html layout:decorate="~{layout}">
+  <head>
+    <title>Editar Proyecto</title>
+  </head>
+  <th:block layout:fragment="breadcrumb">
+    <li class="breadcrumb-item">Editar</li>
+  </th:block>
+  <div layout:fragment="page_content" id="page_content">
+    <form action="#" th:action="@{/proyecto/update}" th:object="${proyecto}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+
+      <div class="form-group">
+        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
+        <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{titulo}" required></input>
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{descripcion}" rows="10" required></textarea>
+      </div>
+      <!-- <div class="form-control">
+        <label class="enquiry">Estado <span>:</span></label>
+        <input type="number" id="estado" th:field="*{estado}" required/>
+        <div class="clear"></div>
+      </div> -->
+      <div class="form-group">
+        <label class="enquiry">Estado</label>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label
+            th:each="estado : ${T(celsius.Model.Proyecto.Estado).values()}"
+            th:for="${#ids.next('estado')}"
+            th:classappend="${estado == selected} ? ('btn btn-'+${estado.etiqueta}+' active') : ('btn btn-'+${estado.etiqueta})">
+            <input type="radio"th:name="estado" th:field="*{estado}" th:text="${estado.nombre}" th:value="${{estado}}" />
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" class="btn btn-primary btn-lg-btn-block" value="Actualizar Proyecto"/>
+      </div>
+    </form>
+  </div>
+  <th:block layout:fragment="scripts">
+      <script type="text/javascript">
+      </script>
+  </th:block>
+</html>

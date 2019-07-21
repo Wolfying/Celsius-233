@@ -1,10 +1,17 @@
 package celsius.Model;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @Entity
-public class Resultado {
+public class Resultado extends Auditable<String>   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,36 +23,4 @@ public class Resultado {
 
     @ManyToOne
     private Comentario comentario;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Proyecto getUnder() {
-        return under;
-    }
-
-    public void setUnder(Proyecto under) {
-        this.under = under;
-    }
-
-    public Comentario getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(Comentario comentario) {
-        this.comentario = comentario;
-    }
 }

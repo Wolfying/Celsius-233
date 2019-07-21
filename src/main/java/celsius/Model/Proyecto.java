@@ -1,25 +1,27 @@
 package celsius.Model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
-import java.util.Date;
 import java.util.Set;
 
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @Entity
-public class Proyecto {
+public class Proyecto extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int estado;
+    @Enumerated(EnumType.ORDINAL)
+    private Estado estado;
 
-    private String nombre;
+    private String titulo;
 
     private String descripcion;
-
-    private Date fecha_creacion;
-
-    private Date fecha_modificacion;
 
     @ManyToMany(mappedBy = "proyectos")
     private Set<Usuario> miembros;
@@ -30,59 +32,30 @@ public class Proyecto {
     @OneToMany(mappedBy = "under")
     private Set<Resultado> resultados;
 
-    public Long getId() {
-        return id;
+    public static enum Estado {
+        EN_ESPERA("En espera", "warning"),
+        ARPOBADO("Aprobado", "success"),
+        RECHAZADO("Rechazado", "danger");
+
+        private final String nombre;
+        private final String etiqueta;
+
+        Estado(String nombre, String etiqueta) {
+          this.nombre = nombre;
+          this.etiqueta = etiqueta;
+        }
+
+        public String getNombre() {
+          return nombre;
+        }
+
+        public String getEtiqueta() {
+          return etiqueta;
+        }
+
+        public String toString() {
+          return this.nombre;
+        }
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Date getFecha_creacion() {
-        return fecha_creacion;
-    }
-
-    public void setFecha_creacion(Date fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
-    }
-
-    public Date getFecha_modificacion() {
-        return fecha_modificacion;
-    }
-
-    public void setFecha_modificacion(Date fecha_modificacion) {
-        this.fecha_modificacion = fecha_modificacion;
-    }
-
-    public Set<Usuario> getMiembros() {
-        return miembros;
-    }
-
-    public void setMiembros(Set<Usuario> miembros) {
-        this.miembros = miembros;
-    }
 }

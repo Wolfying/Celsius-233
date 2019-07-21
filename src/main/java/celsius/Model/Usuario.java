@@ -1,10 +1,16 @@
 package celsius.Model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Set;
 
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @Entity
-public class Usuario {
+public class Usuario extends Auditable<String>   {
     @Id
     private Long rol;
 
@@ -18,36 +24,12 @@ public class Usuario {
 
     @Transient
     private String passwordConfirm;
-
+    
     @ManyToMany
     private Set<Proyecto> proyectos;
 
     @ManyToMany(mappedBy = "creador")
     private Set<Comentario> comentarios;
-
-    public Long getRol() {
-        return rol;
-    }
-
-    public void setRol(Long rol) {
-        this.rol = rol;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getPasswordConfirm() {
         return passwordConfirm;
@@ -55,29 +37,5 @@ public class Usuario {
 
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public Set<Proyecto> getProyectos() {
-        return proyectos;
-    }
-
-    public void setProyectos(Set<Proyecto> proyectos) {
-        this.proyectos = proyectos;
     }
 }
