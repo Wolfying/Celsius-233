@@ -12,6 +12,7 @@ hello\Application.class
 celsius\Model\Comentario.class
 celsius\Repository\UsuarioRepository.class
 hello\Controllers\ByeController.class
+celsius\Config\ResourceHandlerConfiguration.class
 celsius\Service\UsuarioService.class
 hello\Controllers\HelloController.class
 celsius\Model\Proyecto.class

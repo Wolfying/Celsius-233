@@ -12,10 +12,12 @@
       <div class="form-group">
         <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
         <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{titulo}" required></input>
+        <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
       </div>
       <div class="form-group">
         <label for="descripcion">Descripción</label>
         <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{descripcion}" rows="10" required></textarea>
+        <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
       </div>
       <!-- <div class="form-control">
         <label class="enquiry">Estado <span>:</span></label>
@@ -30,6 +32,7 @@
             th:for="${#ids.next('estado')}"
             th:classappend="${estado == selected} ? ('btn btn-'+${estado.etiqueta}+' active') : ('btn btn-'+${estado.etiqueta})">
             <input type="radio"th:name="estado" th:field="*{estado}" th:text="${estado.nombre}" th:value="${{estado}}" />
+            <span th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></span>
           </label>
         </div>
       </div>
