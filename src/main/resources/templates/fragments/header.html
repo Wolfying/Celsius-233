@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div th:fragment="header">
+      <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Celsius</title>
+      <link rel="stylesheet" th:href="@{/css/bootstrap_pulse.min.css}"/>
+      <link rel="stylesheet" th:href="@{/css/custom_css.css}"/>
+    </div>
+  </body>
+</html>

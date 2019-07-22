@@ -3,12 +3,16 @@ celsius\Repository\ComentarioRepository.class
 celsius\Model\Comentario.class
 hello\Application.class
 celsius\Repository\UsuarioRepository.class
+celsius\Repository\ResultadoRepository.class
 hello\Repository\UsuarioRepository.class
 celsius\Application.class
 celsius\Model\Proyecto$Estado.class
 celsius\Service\UsuarioService.class
+celsius\Helper\Message.class
 celsius\Repository\ProyectoRepository.class
+celsius\Helper\Message$Type.class
 hello\Services\UsuarioService.class
+celsius\Helper\MessageHelper.class
 celsius\Model\Resultado.class
 celsius\Model\Proyecto.class
 hello\Controllers\ByeController.class

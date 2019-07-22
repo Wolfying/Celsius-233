@@ -25,6 +25,7 @@ public class Comentario extends Auditable<String>  {
     @ManyToMany
     private Set<Usuario> creador;
 
-    @OneToMany(mappedBy = "comentario")
-    private Set<Resultado> resultados;
+    @ManyToOne
+    @JoinColumn
+    private Resultado resultado;
 }

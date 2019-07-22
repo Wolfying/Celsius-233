@@ -1,6 +1,6 @@
 .jumbotron-sm {
-    padding: 1rem 2rem;
-    background-color: #F9F8FC;
+  padding: 1rem 2rem;
+  background-color: #F9F8FC;
 }
 
 .badge-round {
@@ -13,4 +13,53 @@
 
 .container-90 {
   max-width: 90%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.list-group-item.active:hover {
+  background-color: #2e283e;
+}
+.list-group-item.active {
+  font-weight: bold;
+}
+.list-group-item.active, .list-group-item:hover, .list-group-item:focus {
+  color: #444;
+}
+.list-group-item.active {
+  z-index: 2;
+  color: #444;
+  background-color: #17141F;
+  border-color: #17141F;
+}
+.list-group-item-action:active {
+  color: #444;
+  background-color: #F9F8FC;
+}
+.list-group-item-action:hover, .list-group-item-action:focus {
+  z-index: 1;
+  color: #444;
+  text-decoration: none;
+  background-color: #2e283e;
+}
+.list-group-item {
+  color: #444;
+}
+
+.push-right {
+  float: right;
+}
+
+.card-footer-resultados {
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(0,0,0,0.03);
+  border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+
+.no-border-bottom {
+  border-bottom: 0px;
 }

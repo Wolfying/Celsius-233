@@ -3,13 +3,12 @@
     <title>Editar Proyecto</title>
   </head>
   <th:block layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="/proyecto/list">Listado</a></li>
     <li class="breadcrumb-item"><a th:href="@{'/proyecto/index/'+${proyecto.id}}">Proyecto</a></li>
     <li class="breadcrumb-item active">Editar</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
     <form action="#" th:action="@{/proyecto/update}" th:object="${proyecto}" method="post">
-      <input type="hidden" th:field="*{id}"/>
-
       <div class="form-group">
         <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
         <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{titulo}" required></input>
@@ -20,11 +19,6 @@
         <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{descripcion}" rows="10" required></textarea>
         <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
       </div>
-      <!-- <div class="form-control">
-        <label class="enquiry">Estado <span>:</span></label>
-        <input type="number" id="estado" th:field="*{estado}" required/>
-        <div class="clear"></div>
-      </div> -->
       <div class="form-group">
         <label class="enquiry">Estado</label>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">

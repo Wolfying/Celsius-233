@@ -18,9 +18,14 @@ public class Resultado extends Auditable<String>   {
 
     private String descripcion;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Proyecto under;
+    private String titulo;
+
+    private String subtitulo;
 
     @ManyToOne
-    private Comentario comentario;
+    @JoinColumn
+    private Proyecto proyecto;
+
+    @OneToMany(mappedBy = "resultado", cascade = CascadeType.ALL)
+    private Set<Comentario> comentarios;
 }

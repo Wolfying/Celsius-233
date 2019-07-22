@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <footer th:fragment="footer" class="footer">
+      <div class="card-footer text-muted">
+          <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}"></span>
+      </div>
+    </footer>
+  </body>
+</html>

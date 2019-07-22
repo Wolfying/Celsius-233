@@ -32,8 +32,8 @@ public class Proyecto extends Auditable<String> {
     // @ManyToMany(mappedBy = "proyectos")
     // private Set<Usuario> miembros;
     //
-    // @OneToMany(mappedBy = "under")
-    // private Set<Resultado> resultados;
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
+    private Set<Resultado> resultados;
 
     public static enum Estado {
         EN_ESPERA("En espera", "warning"),
