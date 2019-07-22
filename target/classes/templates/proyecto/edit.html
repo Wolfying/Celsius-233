@@ -3,7 +3,8 @@
     <title>Editar Proyecto</title>
   </head>
   <th:block layout:fragment="breadcrumb">
-    <li class="breadcrumb-item">Editar</li>
+    <li class="breadcrumb-item"><a th:href="@{'/proyecto/index/'+${proyecto.id}}">Proyecto</a></li>
+    <li class="breadcrumb-item active">Editar</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
     <form action="#" th:action="@{/proyecto/update}" th:object="${proyecto}" method="post">
@@ -30,7 +31,7 @@
           <label
             th:each="estado : ${T(celsius.Model.Proyecto.Estado).values()}"
             th:for="${#ids.next('estado')}"
-            th:classappend="${estado == selected} ? ('btn btn-'+${estado.etiqueta}+' active') : ('btn btn-'+${estado.etiqueta})">
+            th:classappend="${estado == selected} ? ('btn btn-'+${estado.etiqueta}+' active') : ('btn btn-outline-'+${estado.etiqueta})">
             <input type="radio"th:name="estado" th:field="*{estado}" th:text="${estado.nombre}" th:value="${{estado}}" />
             <span th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></span>
           </label>

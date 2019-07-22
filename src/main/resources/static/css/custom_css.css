@@ -1,0 +1,16 @@
+.jumbotron-sm {
+    padding: 1rem 2rem;
+    background-color: #F9F8FC;
+}
+
+.badge-round {
+  border-radius: 10px;
+}
+
+.container-80 {
+  max-width: 80%;
+}
+
+.container-90 {
+  max-width: 90%;
+}

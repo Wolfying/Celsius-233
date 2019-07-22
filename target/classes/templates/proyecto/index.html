@@ -3,10 +3,107 @@
     <title>Listado de Proyectos</title>
   </head>
   <th:block layout:fragment="breadcrumb">
-    <li class="breadcrumb-item">Listado</li>
+    <li class="breadcrumb-item"><a href="/proyecto/list">Listado</a></li>
+    <li class="breadcrumb-item active">Proyecto</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
-    <body>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="jumbotron-sm">
+          <h4><strong>[[${proyecto.titulo}]]</strong></h4>
+          <h6>Creado: [[${#dates.format(proyecto.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</h6>
+          <h6>Última modificación: [[${#dates.format(proyecto.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</h6>
+          <hr class="my-4">
+          <p>[[${proyecto.descripcion}]]</p>
+          <div class="row">
+            <div class="col-md-4">
+              <span class="bar" style="display: none;">5,3,9,6,5,9,7,3,5,2</span><svg class="peity" height="16" width="32"><rect fill="#1ab394" x="0" y="7.111111111111111" width="2.3" height="8.88888888888889"></rect><rect fill="#d7d7d7" x="3.3" y="10.666666666666668" width="2.3" height="5.333333333333333"></rect><rect fill="#1ab394" x="6.6" y="0" width="2.3" height="16"></rect><rect fill="#d7d7d7" x="9.899999999999999" y="5.333333333333334" width="2.3" height="10.666666666666666"></rect><rect fill="#1ab394" x="13.2" y="7.111111111111111" width="2.3" height="8.88888888888889"></rect><rect fill="#d7d7d7" x="16.5" y="0" width="2.3" height="16"></rect><rect fill="#1ab394" x="19.799999999999997" y="3.555555555555557" width="2.3" height="12.444444444444443"></rect><rect fill="#d7d7d7" x="23.099999999999998" y="10.666666666666668" width="2.3" height="5.333333333333333"></rect><rect fill="#1ab394" x="26.4" y="7.111111111111111" width="2.3" height="8.88888888888889"></rect><rect fill="#d7d7d7" x="29.7" y="12.444444444444445" width="2.3" height="3.5555555555555554"></rect></svg>
+              <h6><strong>169</strong> Miembros</h6>
+            </div>
+            <div class="col-md-4">
+              <span class="line" style="display: none;">5,3,9,6,5,9,7,3,5,2</span><svg class="peity" height="16" width="32"><polygon fill="#1ab394" points="0 15 0 7.166666666666666 3.5555555555555554 10.5 7.111111111111111 0.5 10.666666666666666 5.5 14.222222222222221 7.166666666666666 17.77777777777778 0.5 21.333333333333332 3.833333333333332 24.888888888888886 10.5 28.444444444444443 7.166666666666666 32 12.166666666666666 32 15"></polygon><polyline fill="transparent" points="0 7.166666666666666 3.5555555555555554 10.5 7.111111111111111 0.5 10.666666666666666 5.5 14.222222222222221 7.166666666666666 17.77777777777778 0.5 21.333333333333332 3.833333333333332 24.888888888888886 10.5 28.444444444444443 7.166666666666666 32 12.166666666666666" stroke="#169c81" stroke-width="1" stroke-linecap="square"></polyline></svg>
+              <h6><strong>28</strong> Resultados</h6>
+            </div>
+            <div class="col-md-4">
+              <span class="bar" style="display: none;">5,3,2,-1,-3,-2,2,3,5,2</span><svg class="peity" height="16" width="32"><rect fill="#1ab394" x="0" y="0" width="2.3" height="10"></rect><rect fill="#d7d7d7" x="3.3" y="4" width="2.3" height="6"></rect><rect fill="#1ab394" x="6.6" y="6" width="2.3" height="4"></rect><rect fill="#d7d7d7" x="9.899999999999999" y="10" width="2.3" height="2"></rect><rect fill="#1ab394" x="13.2" y="10" width="2.3" height="6"></rect><rect fill="#d7d7d7" x="16.5" y="10" width="2.3" height="4"></rect><rect fill="#1ab394" x="19.799999999999997" y="6" width="2.3" height="4"></rect><rect fill="#d7d7d7" x="23.099999999999998" y="4" width="2.3" height="6"></rect><rect fill="#1ab394" x="26.4" y="0" width="2.3" height="10"></rect><rect fill="#d7d7d7" x="29.7" y="6" width="2.3" height="4"></rect></svg>
+              <h6><strong>240</strong> Comentarios</h6>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#nuevo_comentario"><i class="fa fa-envelope"></i> Añadir comentario</button>
+              <!-- MODAL (CREAR FRAGMENTO) -->
+              <div class="modal"  id="nuevo_comentario">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <!-- <div class="modal-header">
+                      <h5 class="modal-title">Nuevo comentario</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div> -->
+                    <div class="modal-body">
+                      <form id="form_nuevo_comentario" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
+                        <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+                        <div class="form-group">
+                          <label for="texto">Comentario:</label>
+                          <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{texto}" rows="10" required></textarea>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <input type="submit" form="form_nuevo_comentario" class="btn btn-primary" value="Crear Comentario"/>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- MODAL END (CREAR FRAGMENTO) -->
+            </div>
+            <div class="col-md-6">
+              <form action="#" th:action="@{'/proyecto/edit/' + ${proyecto.id}}">
+                <button type="submit" class="btn btn-info btn-sm btn-block">Editar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+            <div th:each="comentario: ${comentarios}" class="list-group-item list-group-item-action flex-column align-items-start active">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small>[[${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</small>
+                <small th:if="comentario.fecha_creacion != comentario.fecha_modificacion">Edited: [[${#dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</small>
+              </div>
+              <p class="mb-1">[[${comentario.texto}]]</p>
+              <!-- <small> -->
+                <!-- [[ -->
+                <!-- ${comentario.creador.getNombre()} -->
+                <!-- ]] -->
+              <!-- </small> -->
+            </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card mb-3">
+          <h3 class="card-header">Blog</h3>
+          <div class="card-body">
+            <!-- EACH -->
+            <h5 class="card-title"> ENTRADA #1</h5>
+            <h6 class="card-subtitle text-muted">Subtitulo</h6>
+          </div>
+          <div class="card-body">
+            <p class="card-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pellentesque, nisl a tristique tempus, augue mauris pellentesque orci, ac feugiat lorem tortor at tortor. Aenean efficitur et risus sit amet eleifend. Aliquam sed dignissim est. Nunc imperdiet leo quis eros fermentum dignissim. Vestibulum posuere in turpis a semper. Vestibulum varius imperdiet condimentum. Aliquam at nunc non neque venenatis semper eu in nunc. Aliquam a nunc egestas turpis hendrerit maximus. Phasellus congue, nunc vel molestie elementum, nulla massa sollicitudin arcu, vel maximus purus orci tristique nunc. Suspendisse potenti. Maecenas venenatis vel erat eu varius. Etiam eget leo nunc. Quisque auctor nunc efficitur, vehicula velit at, cursus purus. In sapien libero, laoreet id egestas id, pharetra at odio. Aenean vel nisl luctus, rutrum tortor ut, rhoncus risus.
+            </p>
+          </div>
+          <div class="card-footer text-muted">
+            FECHA
+          </div>
+            <!-- END EACH -->
+        </div>
+      </div>
+    </div>
+    <!-- <body>
       <table class="table table-hover">
         <thead>
           <tr>
@@ -26,7 +123,7 @@
           <td><button type="button" class="btn btn-info" th:href="@{'/proyecto/edit/' + ${proyecto.id}}">Editar</button></td>
         </tbody>
       </table>
-    </body>
+    </body> -->
   </div>
   <th:block layout:fragment="scripts">
     <script type="text/javascript">

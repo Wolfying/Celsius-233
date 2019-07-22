@@ -3,13 +3,14 @@
         <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Celsius</title>
         <meta name="description" content=""/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link rel="stylesheet" type="text/css" th:href="@{https://bootswatch.com/4/pulse/bootstrap.min.css}" />
+        <link rel="stylesheet" th:href="@{/css/bootstrap_pulse.min.css}"/>
+        <link rel="stylesheet" th:href="@{/css/custom_css.css}"/>
     </head>
     <body>
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-brand mb-0 h1">Celsius 233 - Proyectos</span>
         </nav>
-        <div class="container">
+        <div class="container container-80">
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb">
                     <th:block layout:fragment="breadcrumb">
@@ -23,13 +24,14 @@
             <!-- End Content -->
         </div>
         <!-- /.container -->
-        <script type="text/javascript" th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
-        <script type="text/javascript" th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+        <script src="/js/jquery-3.4.1.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/custom_js.js"></script>
         <th:block layout:fragment="scripts">
         </th:block>
         <footer>
             <p layout:fragment="custom-footer"></p>
-            <div class="push-right">
+            <div class="card-footer text-muted">
                 <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}"></span>
             </div>
         </footer>

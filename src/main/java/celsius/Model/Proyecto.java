@@ -3,10 +3,13 @@ package celsius.Model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Setter(AccessLevel.PUBLIC)
 @Getter(AccessLevel.PUBLIC)
@@ -23,14 +26,14 @@ public class Proyecto extends Auditable<String> {
 
     private String descripcion;
 
-    @ManyToMany(mappedBy = "proyectos")
-    private Set<Usuario> miembros;
-
-    @ManyToMany
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
     private Set<Comentario> comentarios;
 
-    @OneToMany(mappedBy = "under")
-    private Set<Resultado> resultados;
+    // @ManyToMany(mappedBy = "proyectos")
+    // private Set<Usuario> miembros;
+    //
+    // @OneToMany(mappedBy = "under")
+    // private Set<Resultado> resultados;
 
     public static enum Estado {
         EN_ESPERA("En espera", "warning"),

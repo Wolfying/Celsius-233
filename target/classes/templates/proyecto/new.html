@@ -3,7 +3,8 @@
     <title>Nuevo Proyecto</title>
   </head>
   <th:block layout:fragment="breadcrumb">
-    <li class="breadcrumb-item">Nuevo</li>
+    <li class="breadcrumb-item"><a href="/proyecto/list">Listado</a></li>
+    <li class="breadcrumb-item active">Nuevo</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
     <form action="#" th:action="@{/proyecto/create}" th:object="${proyecto}" method="post">

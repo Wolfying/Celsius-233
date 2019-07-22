@@ -1,7 +1,9 @@
 package celsius.Controller;
 
 import celsius.Model.Proyecto;
+import celsius.Model.Comentario;
 import celsius.Repository.ProyectoRepository;
+import celsius.Repository.ComentarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.ui.Model;
@@ -26,6 +29,9 @@ public class ProyectoController {
     @Autowired
     ProyectoRepository proyectoRepository;
 
+    @Autowired
+    ComentarioRepository comentarioRepository;
+
     @GetMapping(value={"/{id}", "/index/{id}"})
     public String getProyecto(@PathVariable("id") Long id, Model model) {
       Optional<Proyecto> optProyecto = proyectoRepository.findById(id);
@@ -34,6 +40,7 @@ public class ProyectoController {
         return "";
       }
       model.addAttribute("proyecto", optProyecto.get());
+      model.addAttribute("comentarios", comentarioRepository.findAll());
       return "proyecto/index";
     }
 
@@ -100,4 +107,16 @@ public class ProyectoController {
       return "redirect:/proyecto/list";
     }
 
+    @ModelAttribute(value = "comentario")
+    public Comentario getComentario() {
+      return new Comentario();
+    }
+
+    // GET guarda nuevo comentario
+    @PostMapping(value = {"/comentario/create", "comantario/crear"})
+    public String saveComentario(@ModelAttribute("comentario") Comentario comentario, Model model) {
+      System.out.println(comentario.getId());
+      comentarioRepository.save(comentario);
+      return "redirect:/proyecto/index/"+comentario.getProyecto().getId();
+    }
 }

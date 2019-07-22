@@ -14,15 +14,16 @@ import java.util.Set;
 public class Comentario extends Auditable<String>  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String texto;
 
+    @ManyToOne
+    @JoinColumn
+    private Proyecto proyecto;
+
     @ManyToMany
     private Set<Usuario> creador;
-
-    @ManyToMany(mappedBy = "comentarios")
-    private Set<Proyecto> proyectos;
 
     @OneToMany(mappedBy = "comentario")
     private Set<Resultado> resultados;
