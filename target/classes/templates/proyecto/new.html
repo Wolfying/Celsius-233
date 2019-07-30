@@ -8,7 +8,6 @@
   </th:block>
   <div layout:fragment="page_content" id="page_content">
     <form action="#" th:action="@{/proyecto/create}" th:object="${proyecto}" method="post">
-    </div>
       <ul>
         <li th:each="err : ${#fields.errors('titulo')}" th:text="${err}" />
         <li th:each="err : ${#fields.errors('descripcion')}" th:text="${err}" />

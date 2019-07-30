@@ -29,8 +29,8 @@
                 <form action="#" th:action="@{'/proyecto/index/' + ${proyecto.id}}">
                   <button type="submit"  class="btn btn-primary">Ver Proyecto</button>
                 </form>
-                <form action="#" th:action="@{'/proyecto/edit/' + ${proyecto.id}}">
-                  <button type="submit"  class="btn btn-info">Editar</button>
+                <form action="#" th:action="@{'/proyecto/resolve/' + ${proyecto.id}}">
+                  <button type="submit"  class="btn btn-info">Resolver</button>
                 </form>
                 <form action="#" th:action="@{/proyecto/delete}" method="post">
                   <input type="hidden" name="id" th:value="${proyecto.id}" />

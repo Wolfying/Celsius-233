@@ -1,12 +1,15 @@
 package celsius.Model;
 
 import lombok.AccessLevel;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+
+
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,8 +25,10 @@ public class Proyecto extends Auditable<String> {
     @Enumerated(EnumType.ORDINAL)
     private Estado estado;
 
+    @Column(columnDefinition = "TEXT")
     private String titulo;
-
+    
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
@@ -61,5 +66,5 @@ public class Proyecto extends Auditable<String> {
           return this.nombre;
         }
     }
-
+    
 }

@@ -36,13 +36,6 @@
               </form>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              <form action="#" th:action="@{'/proyecto/resolve/' + ${proyecto.id}}">
-                <button type="submit" class="btn btn-info btn-sm btn-block">Resolver (TEST)</button>
-              </form>
-            </div>
-          </div>
         </div>
         <!-- COMENTARIOS -->
         <div class="card mb-3">
@@ -157,38 +150,42 @@
               </p>
             </div>
             <div class="card-footer-resultados text-muted">
-              <small>
-                [[${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]
-                <div class="push-right" th:if="${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</div>
-              </small>
-		          <button type="button" class="push-right btn btn-primary btn-xxs" data-toggle="modal" th:data-target="'#nuevo_comentario_resultado'+${resultado.getId()}"><i class="fa fa-envelope"></i> Añadir comentario</button>
-		          <!-- MODAL (CREAR FRAGMENTO) -->
-		          <div class="modal"  th:id="'nuevo_comentario_resultado'+${resultado.getId()}">
-		            <div class="modal-dialog" role="document">
-		              <div class="modal-content">
-		                <!-- <div class="modal-header">
-		                  <h5 class="modal-title">Nuevo comentario</h5>
-		                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		                    <span aria-hidden="true">&times;</span>
-		                  </button>
-		                </div> -->
-		                <div class="modal-body">
-		                  <form th:id="'form_nuevo_comentario_resultado'+${resultado.getId()}" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
-		                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
-		                    <input type="hidden" name="resultado" th:value="${resultado.id}" />
-		                    <div class="form-group">
-		                      <label for="texto">Comentario:</label>
-		                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
-		                    </div>
-		                  </form>
-		                </div>
-		                <div class="modal-footer">
-		                  <input type="submit" th:form="'form_nuevo_comentario_resultado'+${resultado.getId()}" class="btn btn-primary" value="Crear comentario"/>
-		                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-		                </div>
-		              </div>
-		            </div>
-	            </div>
+            	<div class="row">
+            		<div class="col-md-12">
+		              <small>
+		                [[${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]
+		                <div class="push-right" th:if="${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</div>
+		              </small>
+				          <button type="button" class="push-right btn btn-primary btn-xxs" data-toggle="modal" th:data-target="'#nuevo_comentario_resultado'+${resultado.getId()}"><i class="fa fa-envelope"></i> Añadir comentario</button>
+				          <!-- MODAL (CREAR FRAGMENTO) -->
+				          <div class="modal"  th:id="'nuevo_comentario_resultado'+${resultado.getId()}">
+				            <div class="modal-dialog" role="document">
+				              <div class="modal-content">
+				                <!-- <div class="modal-header">
+				                  <h5 class="modal-title">Nuevo comentario</h5>
+				                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				                    <span aria-hidden="true">&times;</span>
+				                  </button>
+				                </div> -->
+				                <div class="modal-body">
+				                  <form th:id="'form_nuevo_comentario_resultado'+${resultado.getId()}" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
+				                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+				                    <input type="hidden" name="resultado" th:value="${resultado.id}" />
+				                    <div class="form-group">
+				                      <label for="texto">Comentario:</label>
+				                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
+				                    </div>
+				                  </form>
+				                </div>
+				                <div class="modal-footer">
+				                  <input type="submit" th:form="'form_nuevo_comentario_resultado'+${resultado.getId()}" class="btn btn-primary" value="Crear comentario"/>
+				                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				                </div>
+				              </div>
+				            </div>
+			            </div>
+            		</div>
+            	</div>
 		          <!-- MODAL END (CREAR FRAGMENTO) -->
 	            <!-- EACH -->
 	            <div class="list-group">

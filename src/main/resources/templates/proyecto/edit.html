@@ -11,6 +11,7 @@
     <form action="#" th:action="@{/proyecto/update}" method="post">
 			<div class="row">
 	      <input type="hidden" th:field="*{proyecto.id}"/>
+	      <input type="hidden" th:field="*{proyecto.estado}"/>
 				<div class="col-md-12">
 		      <div class="form-group">
 		        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>

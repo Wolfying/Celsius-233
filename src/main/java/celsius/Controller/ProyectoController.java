@@ -6,6 +6,8 @@ import celsius.Model.Resultado;
 import celsius.Repository.ProyectoRepository;
 import celsius.Repository.ComentarioRepository;
 import celsius.Repository.ResultadoRepository;
+import celsius.Helper.MessageHelper;
+import celsius.Helper.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.ui.Model;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import celsius.Helper.MessageHelper;
 
 import javax.validation.Valid;
 
@@ -60,12 +61,21 @@ public class ProyectoController {
       }
       List<Comentario> comentarios = comentarioRepository.findComentariosProyecto(optProyecto.get());
       List<Resultado> resultados = resultadoRepository.findResultados(optProyecto.get());
-      List<List<Comentario>> resultados_comentarios = comentarioRepository.findComentariosResultados(resultados);
+      List<List<Comentario>> resultados_comentarios;
+      int contador_resultados_comentarios;
+      if (!resultados.isEmpty()) {
+        resultados_comentarios = comentarioRepository.findComentariosResultados(resultados);
+        contador_resultados_comentarios = resultados_comentarios.size();
+      } else {
+      	resultados_comentarios = null;
+      	contador_resultados_comentarios = 0;
+      }
       model.addAttribute("proyecto", optProyecto.get());
       model.addAttribute("comentarios", comentarios);
       model.addAttribute("resultados", resultados);
       model.addAttribute("resultados_comentarios", resultados_comentarios);
       model.addAttribute("contador_comentarios", comentarios.size());
+      model.addAttribute("contador_resultados_comentarios", contador_resultados_comentarios);
       model.addAttribute("contador_resultados", resultados.size());
       return "proyecto/index";
     }
@@ -108,16 +118,19 @@ public class ProyectoController {
 
     // POST actualizar proyecto
     @PostMapping(value={"/update", "/actualizar"})
-    public String updateProyecto(@ModelAttribute Proyecto proyecto, BindingResult errors, Model model, RedirectAttributes ra) {
+    public String updateProyecto(@Valid @ModelAttribute Proyecto proyecto, BindingResult errors, Model model, RedirectAttributes ra) {
       if (!errors.hasErrors()) {
-        proyectoRepository.save(proyecto);
+      	Optional<Proyecto> existing = proyectoRepository.findById(proyecto.getId());
+      	if (existing.isPresent()) {
+	        UpdateHelper.copyNonNullProperties(proyecto, existing.get());
+	        proyectoRepository.save(existing.get());
+      	}
         model.addAttribute("proyectos", proyectoRepository.findAll());
         MessageHelper.addSuccessAttribute(ra, "Proyecto actualizado con éxito.");
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al actualizar proyecto.");
         System.out.println(errors);
       }
-      System.out.println(proyecto.getEstado());
       return (errors.hasErrors() ? "redirect:/proyecto/edit/"+proyecto.getId() : "redirect:/proyecto/list");
     }
 
@@ -184,11 +197,15 @@ public class ProyectoController {
 
     // POST actualizar proyecto
     @PostMapping(value={"/update_status", "/actualizar_estado"})
-    public String updateStatusProyecto(@ModelAttribute("proyecto") Proyecto proyecto, @ModelAttribute("comentario") Comentario comentario, BindingResult errors, Model model, RedirectAttributes ra) {
+    public String updateStatusProyecto(@Valid @ModelAttribute("proyecto") Proyecto proyecto, @Valid @ModelAttribute("comentario") Comentario comentario, BindingResult errors, Model model, RedirectAttributes ra) {
       if (!errors.hasErrors()) {
+      	Optional<Proyecto> existing = proyectoRepository.findById(proyecto.getId());
+      	if (existing.isPresent()) {
+	        UpdateHelper.copyNonNullProperties(proyecto, existing.get());
+	        proyectoRepository.save(existing.get());
+      	}
       	comentario.setProyecto(proyecto);
         comentarioRepository.save(comentario);
-        proyectoRepository.save(proyecto);
         model.addAttribute("proyectos", proyectoRepository.findAll());
         MessageHelper.addSuccessAttribute(ra, "Proyecto actualizado con éxito.");
       } else {
