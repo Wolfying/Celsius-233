@@ -1,17 +1,17 @@
 <html layout:decorate="~{layout}">
   <head>
-    <title>Editar Proyecto</title>
+    <title>Resolver Proyecto</title>
   </head>
   <th:block layout:fragment="breadcrumb">
     <li class="breadcrumb-item"><a href="/proyecto/list">Listado</a></li>
     <li class="breadcrumb-item"><a th:href="@{'/proyecto/index/'+${proyecto.id}}">Proyecto</a></li>
-    <li class="breadcrumb-item active">Editar</li>
+    <li class="breadcrumb-item active">Resolver</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
-    <form action="#" th:action="@{/proyecto/update}" method="post">
+    <form action="#" th:action="@{/proyecto/update_status}" method="post">
 			<div class="row">
 	      <input type="hidden" th:field="*{proyecto.id}"/>
-				<div class="col-md-12">
+				<div class="col-md-6">
 		      <div class="form-group">
 		        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
 		        <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{proyecto.titulo}" required></input>
@@ -22,6 +22,27 @@
 		        <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{proyecto.descripcion}" rows="10" required></textarea>
 		        <span th:if="${#fields.hasErrors('proyecto.descripcion')}" th:errors="*{proyecto.descripcion}"></span>
 		      </div>
+				</div>
+				<div class="col-md-6">
+		      <div class="form-group">
+		        	<label class="col-form-label col-form-label-lg" for="estado" >Estado</label>
+		      	<div>
+			        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+			          <label
+			            th:each="ESTADO : ${T(celsius.Model.Proyecto.Estado).values()}"
+			            th:for="${#ids.next('estado')}"
+			            th:classappend="${proyecto.estado == ESTADO} ? ('btn btn-outline-'+${ESTADO.etiqueta}+' active') : ('btn btn-outline-'+${ESTADO.etiqueta})">
+			            <input type="radio"th:name="ESTADO" th:field="*{proyecto.estado}" th:text="${ESTADO.nombre}" th:value="${{ESTADO}}" />
+			            <span th:if="${#fields.hasErrors('proyecto.estado')}" th:errors="*{proyecto.estado}"></span>
+			          </label>
+	        		</div>
+		      	</div>
+		      </div>
+					<div class="form-group" th:object="${comentario}">
+							<label class="col-form-label col-form-label-lg" for="texto">Comentario</label>
+			        <textarea class="form-control" placeholder="Motivo de estado..." th:field="*{texto}" rows="5"></textarea>
+			        <span th:if="${#fields.hasErrors('texto')}" th:errors="*{texto}"></span>
+					</div>
 				</div>
 			</div>
 			<div class="row">

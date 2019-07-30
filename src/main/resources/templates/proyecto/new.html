@@ -8,6 +8,7 @@
   </th:block>
   <div layout:fragment="page_content" id="page_content">
     <form action="#" th:action="@{/proyecto/create}" th:object="${proyecto}" method="post">
+    </div>
       <ul>
         <li th:each="err : ${#fields.errors('titulo')}" th:text="${err}" />
         <li th:each="err : ${#fields.errors('descripcion')}" th:text="${err}" />
@@ -16,7 +17,7 @@
 
       <div class="form-group">
         <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
-        <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{titulo}" required></input>
+        <input type="text" class="form-control form-control-lg" placeholder="..." th:field="*{titulo}" required></input>
         <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
       </div>
       <div class="form-group">
@@ -24,7 +25,7 @@
         <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{descripcion}" rows="10" required></textarea>
         <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
       </div>
-      <input type="submit" class="btn btn-primary" value="Submit"></input>
+      <input type="submit" class="btn btn-primary" value="Registrar proyecto"></input>
     </form>
   </div>
   <th:block layout:fragment="scripts">

@@ -21,6 +21,22 @@
   width: 100%;
 }
 
+.btn-xs, .btn-group-xs > .btn {
+		margin-top: -0.2rem;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.765625rem;
+    line-height: 1.5;
+    border-radius: 0;
+}
+
+.btn-xxs {
+		margin-top: -0.2rem;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.765625rem;
+    line-height: 1.5;
+    border-radius: 0;
+}
+
 .list-group-item.active:hover {
   background-color: #2e283e;
 }

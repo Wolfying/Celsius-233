@@ -51,17 +51,22 @@ public class ProyectoController {
     }
 
     @GetMapping(value={"/{id}", "/index/{id}"})
-    public String getProyecto(@PathVariable("id") Long id, Model model) {
+    public String getProyecto(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
       Optional<Proyecto> optProyecto = proyectoRepository.findById(id);
       if (!optProyecto.isPresent()) {
         //ERROR
+        MessageHelper.addErrorAttribute(ra, "Error al ir a la página del proyecto. Proyecto no encontrado.");
         return "";
       }
+      List<Comentario> comentarios = comentarioRepository.findComentariosProyecto(optProyecto.get());
+      List<Resultado> resultados = resultadoRepository.findResultados(optProyecto.get());
+      List<List<Comentario>> resultados_comentarios = comentarioRepository.findComentariosResultados(resultados);
       model.addAttribute("proyecto", optProyecto.get());
-      model.addAttribute("comentarios", comentarioRepository.findAll());
-      model.addAttribute("resultados", resultadoRepository.findAll());
-      model.addAttribute("contador_comentarios", comentarioRepository.count());
-      model.addAttribute("contador_resultados", resultadoRepository.count());
+      model.addAttribute("comentarios", comentarios);
+      model.addAttribute("resultados", resultados);
+      model.addAttribute("resultados_comentarios", resultados_comentarios);
+      model.addAttribute("contador_comentarios", comentarios.size());
+      model.addAttribute("contador_resultados", resultados.size());
       return "proyecto/index";
     }
 
@@ -90,10 +95,11 @@ public class ProyectoController {
 
     // GET editar proyecto
     @GetMapping(value = {"/edit/{id}", "/editar/{id}"})
-    public String editProyecto(@PathVariable("id") Long id, Model model) {
+    public String editProyecto(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
       Optional<Proyecto> optProyecto = proyectoRepository.findById(id);
       if (!optProyecto.isPresent()) {
         //ERROR
+        MessageHelper.addErrorAttribute(ra, "Error al ir al formulario de edición del proyecto. Proyecto no encontrado.");
         return "";
       }
       model.addAttribute("proyecto", optProyecto.get());
@@ -109,7 +115,9 @@ public class ProyectoController {
         MessageHelper.addSuccessAttribute(ra, "Proyecto actualizado con éxito.");
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al actualizar proyecto.");
+        System.out.println(errors);
       }
+      System.out.println(proyecto.getEstado());
       return (errors.hasErrors() ? "redirect:/proyecto/edit/"+proyecto.getId() : "redirect:/proyecto/list");
     }
 
@@ -146,7 +154,7 @@ public class ProyectoController {
       return "redirect:/proyecto/index/"+comentario.getProyecto().getId();
     }
 
-    // POST guarda nuevo comentario
+    // POST guarda nuevo resultado
     @PostMapping(value = {"/resultado/create", "/resultado/crear"})
     public String saveComentario(@ModelAttribute("resultado") Resultado resultado, BindingResult errors, Model model, RedirectAttributes ra) {
       resultadoRepository.save(resultado);
@@ -156,5 +164,36 @@ public class ProyectoController {
         MessageHelper.addErrorAttribute(ra, "Error al crear resultado.");
       }
       return "redirect:/proyecto/index/"+resultado.getProyecto().getId();
+    }
+    
+
+
+    // GET editar proyecto
+    @GetMapping(value = {"/resolve/{id}", "/resolver/{id}"})
+    public String resolveProyecto(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
+      Optional<Proyecto> optProyecto = proyectoRepository.findById(id);
+      if (!optProyecto.isPresent()) {
+        //ERROR
+        MessageHelper.addErrorAttribute(ra, "Error al ir al formulario de selección del proyecto. Proyecto no encontrado.");
+        return "";
+      }
+      model.addAttribute("comentario", new Comentario());
+      model.addAttribute("proyecto", optProyecto.get());
+      return "proyecto/resolve";
+    }
+
+    // POST actualizar proyecto
+    @PostMapping(value={"/update_status", "/actualizar_estado"})
+    public String updateStatusProyecto(@ModelAttribute("proyecto") Proyecto proyecto, @ModelAttribute("comentario") Comentario comentario, BindingResult errors, Model model, RedirectAttributes ra) {
+      if (!errors.hasErrors()) {
+      	comentario.setProyecto(proyecto);
+        comentarioRepository.save(comentario);
+        proyectoRepository.save(proyecto);
+        model.addAttribute("proyectos", proyectoRepository.findAll());
+        MessageHelper.addSuccessAttribute(ra, "Proyecto actualizado con éxito.");
+      } else {
+        MessageHelper.addErrorAttribute(ra, "Error al actualizar proyecto.");
+      }
+      return (errors.hasErrors() ? "redirect:/proyecto/resolve/"+proyecto.getId() : "redirect:/proyecto/index/"+proyecto.getId());
     }
 }

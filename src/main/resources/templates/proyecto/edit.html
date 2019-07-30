@@ -8,34 +8,29 @@
     <li class="breadcrumb-item active">Editar</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
-    <form action="#" th:action="@{/proyecto/update}" th:object="${proyecto}" method="post">
-      <input type="hidden" th:field="*{id}"/>
-
-      <div class="form-group">
-        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
-        <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{titulo}" required></input>
-        <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
-      </div>
-      <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{descripcion}" rows="10" required></textarea>
-        <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
-      </div>
-      <div class="form-group">
-        <label class="enquiry">Estado</label>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
-            th:each="estado : ${T(celsius.Model.Proyecto.Estado).values()}"
-            th:for="${#ids.next('estado')}"
-            th:classappend="${estado == selected} ? ('btn btn-'+${estado.etiqueta}+' active') : ('btn btn-outline-'+${estado.etiqueta})">
-            <input type="radio"th:name="estado" th:field="*{estado}" th:text="${estado.nombre}" th:value="${{estado}}" />
-            <span th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></span>
-          </label>
-        </div>
-      </div>
-      <div class="form-group">
-        <input type="submit" class="btn btn-primary btn-lg-btn-block" value="Actualizar Proyecto"/>
-      </div>
+    <form action="#" th:action="@{/proyecto/update}" method="post">
+			<div class="row">
+	      <input type="hidden" th:field="*{proyecto.id}"/>
+				<div class="col-md-12">
+		      <div class="form-group">
+		        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
+		        <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{proyecto.titulo}" required></input>
+		        <span th:if="${#fields.hasErrors('proyecto.titulo')}" th:errors="*{proyecto.titulo}"></span>
+		      </div>
+		      <div class="form-group">
+		        <label for="descripcion">Descripción</label>
+		        <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{proyecto.descripcion}" rows="10" required></textarea>
+		        <span th:if="${#fields.hasErrors('proyecto.descripcion')}" th:errors="*{proyecto.descripcion}"></span>
+		      </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+		      <div class="form-group push-right">
+		        <input type="submit" class="btn btn-primary btn-lg-btn-block" value="Actualizar Proyecto"/>
+		      </div>
+				</div>
+			</div>
     </form>
   </div>
   <th:block layout:fragment="scripts">

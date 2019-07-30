@@ -9,7 +9,7 @@
   <div layout:fragment="page_content" id="page_content">
     <div class="row">
       <div class="col-md-4">
-        <div class="jumbotron-sm mb-3">
+        <div th:classappend="'jumbotron-sm mb-3 card border-'+${proyecto.getEstado().getEtiqueta()}">
           <h4><strong>[[${proyecto.titulo}]]</strong></h4>
           <h6>Creado: [[${#dates.format(proyecto.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</h6>
           <h6>Última modificación: [[${#dates.format(proyecto.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</h6>
@@ -30,46 +30,53 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#nuevo_comentario"><i class="fa fa-envelope"></i> Añadir comentario</button>
-              <!-- MODAL (CREAR FRAGMENTO) -->
-              <div class="modal"  id="nuevo_comentario">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <!-- <div class="modal-header">
-                      <h5 class="modal-title">Nuevo comentario</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div> -->
-                    <div class="modal-body">
-                      <form id="form_nuevo_comentario" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
-                        <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
-                        <div class="form-group">
-                          <label for="texto">Comentario:</label>
-                          <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <input type="submit" form="form_nuevo_comentario" class="btn btn-primary" value="Crear comentario"/>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- MODAL END (CREAR FRAGMENTO) -->
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
               <form action="#" th:action="@{'/proyecto/edit/' + ${proyecto.id}}">
                 <button type="submit" class="btn btn-info btn-sm btn-block">Editar</button>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <form action="#" th:action="@{'/proyecto/resolve/' + ${proyecto.id}}">
+                <button type="submit" class="btn btn-info btn-sm btn-block">Resolver (TEST)</button>
               </form>
             </div>
           </div>
         </div>
         <!-- COMENTARIOS -->
         <div class="card mb-3">
-          <h5 class="card-header">Comentarios</h5>
+          <h5 class="card-header">
+          	Comentarios
+	          <button type="button" class="push-right btn btn-primary btn-xs" data-toggle="modal" data-target="#nuevo_comentario"><i class="fa fa-envelope"></i> Añadir comentario</button>
+	          <!-- MODAL (CREAR FRAGMENTO) -->
+	          <div class="modal"  id="nuevo_comentario">
+	            <div class="modal-dialog" role="document">
+	              <div class="modal-content">
+	                <!-- <div class="modal-header">
+	                  <h5 class="modal-title">Nuevo comentario</h5>
+	                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                  </button>
+	                </div> -->
+	                <div class="modal-body">
+	                  <form id="form_nuevo_comentario" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
+	                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+	                    <div class="form-group">
+	                      <label for="texto">Comentario:</label>
+	                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
+	                    </div>
+	                  </form>
+	                </div>
+	                <div class="modal-footer">
+	                  <input type="submit" form="form_nuevo_comentario" class="btn btn-primary" value="Crear comentario"/>
+	                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	                </div>
+	              </div>
+	            </div>
+            </div>
+	          <!-- MODAL END (CREAR FRAGMENTO) -->
+          </h5>
           <div class="card-body">
             <!-- EACH -->
             <div class="list-group">
@@ -154,6 +161,55 @@
                 [[${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]
                 <div class="push-right" th:if="${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</div>
               </small>
+		          <button type="button" class="push-right btn btn-primary btn-xxs" data-toggle="modal" th:data-target="'#nuevo_comentario_resultado'+${resultado.getId()}"><i class="fa fa-envelope"></i> Añadir comentario</button>
+		          <!-- MODAL (CREAR FRAGMENTO) -->
+		          <div class="modal"  th:id="'nuevo_comentario_resultado'+${resultado.getId()}">
+		            <div class="modal-dialog" role="document">
+		              <div class="modal-content">
+		                <!-- <div class="modal-header">
+		                  <h5 class="modal-title">Nuevo comentario</h5>
+		                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		                    <span aria-hidden="true">&times;</span>
+		                  </button>
+		                </div> -->
+		                <div class="modal-body">
+		                  <form th:id="'form_nuevo_comentario_resultado'+${resultado.getId()}" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
+		                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+		                    <input type="hidden" name="resultado" th:value="${resultado.id}" />
+		                    <div class="form-group">
+		                      <label for="texto">Comentario:</label>
+		                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
+		                    </div>
+		                  </form>
+		                </div>
+		                <div class="modal-footer">
+		                  <input type="submit" th:form="'form_nuevo_comentario_resultado'+${resultado.getId()}" class="btn btn-primary" value="Crear comentario"/>
+		                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+		                </div>
+		              </div>
+		            </div>
+	            </div>
+		          <!-- MODAL END (CREAR FRAGMENTO) -->
+	            <!-- EACH -->
+	            <div class="list-group">
+	              <div th:each="comentario: ${resultados_comentarios}">
+		              <div th:if="${comentario.getResultado().getId() == resultado.getId()}">
+		                <hr class="my-1">
+		                <div class="d-flex w-100 justify-content-between">
+		                  <!-- <h5 class="mb-1">List group item heading</h5> -->
+		                  <small>[[${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</small>
+		                  <small th:if="${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</small>
+		                </div>
+		                <p class="mb-1">[[${comentario.texto}]]</p>
+		                <!-- <small> -->
+		                  <!-- [[ -->
+		                  <!-- ${comentario.creador.getNombre()} -->
+		                  <!-- ]] -->
+		                <!-- </small> -->
+		              </div>
+	              </div>
+	            </div>
+	            <!-- END EACH -->
             </div>
           </div>
           <!-- END EACH -->
