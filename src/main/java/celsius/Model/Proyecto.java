@@ -55,7 +55,8 @@ public class Proyecto extends Auditable<String> {
         public String getEtiqueta() {
           return etiqueta;
         }
-
+        
+        @Override
         public String toString() {
           return this.nombre;
         }

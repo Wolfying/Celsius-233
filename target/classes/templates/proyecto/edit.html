@@ -9,6 +9,8 @@
   </th:block>
   <div layout:fragment="page_content" id="page_content">
     <form action="#" th:action="@{/proyecto/update}" th:object="${proyecto}" method="post">
+      <input type="hidden" th:field="*{id}"/>
+
       <div class="form-group">
         <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
         <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{titulo}" required></input>
