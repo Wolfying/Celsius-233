@@ -7,8 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalTime;
 import java.util.Set;
 
 @Setter(AccessLevel.PUBLIC)
@@ -24,14 +25,18 @@ public class Resultado extends Auditable<String>   {
     
     @Column(columnDefinition = "TEXT")
     private String titulo;
-    
-    @Column(columnDefinition = "TEXT")
-    private String subtitulo;
 
     @ManyToOne
     @JoinColumn
     private Proyecto proyecto;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private LocalTime tiempo_dedicado;
 
     @OneToMany(mappedBy = "resultado", cascade = CascadeType.ALL)
     private Set<Comentario> comentarios;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id")
+    private Job job;
 }

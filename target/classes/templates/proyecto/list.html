@@ -3,6 +3,7 @@
     <title>Listado de Proyectos</title>
   </head>
   <th:block layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="http://localhost:8080/">TEST USUARIOS</a></li>
     <li class="breadcrumb-item active">Listado</li>
   </th:block>
   <div layout:fragment="page_content" id="page_content">
@@ -15,6 +16,7 @@
             <th scope="col">Estado</th>
             <th scope="col">Fecha de creación</th>
             <th scope="col">Fecha de modificación</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
@@ -27,14 +29,14 @@
             <td>
               <div class="btn-group btn-group-toggle">
                 <form action="#" th:action="@{'/proyecto/index/' + ${proyecto.id}}">
-                  <button type="submit"  class="btn btn-primary">Ver Proyecto</button>
+                  <button type="submit"  class="btn btn-primary"><i class="fa fa-plus"></i> Ver Proyecto</button>
                 </form>
-                <form action="#" th:action="@{'/proyecto/resolve/' + ${proyecto.id}}">
-                  <button type="submit"  class="btn btn-info">Resolver</button>
+                <form action="#" th:if="${admin}" th:action="@{'/proyecto/resolve/' + ${proyecto.id}}">
+                  <button type="submit"  class="btn btn-info"><i class="fa fa-edit"></i> Resolver</button>
                 </form>
-                <form action="#" th:action="@{/proyecto/delete}" method="post">
+                <form action="#" th:if="${admin}" th:action="@{/proyecto/delete}" method="post">
                   <input type="hidden" name="id" th:value="${proyecto.id}" />
-                  <button type="submit" onclick="show_confirm()" class="btn btn-danger">Eliminar</button>
+                  <button type="submit" onclick="show_confirm()" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
                 </form>
               </div>
             </td>

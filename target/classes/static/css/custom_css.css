@@ -15,9 +15,26 @@
   max-width: 90%;
 }
 
+html, body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
+.container {
+   min-height:100%;
+   position:relative;
+}
+.header {
+   background:#ff0;
+   padding:10px;
+}
+.body {
+   padding:10px;
+   padding-bottom:60px;   /* Height of the footer */
+}
 .footer {
-  bottom: 0;
-  width: 100%;
+   bottom:0;
+   width:100%;
 }
 
 .btn-xs, .btn-group-xs > .btn {
@@ -34,6 +51,30 @@
     font-size: 0.765625rem;
     line-height: 1.5;
     border-radius: 0;
+}
+
+.btn-xxs-alt {
+    padding: 0.1rem 0.5rem;
+    font-size: 0.765625rem;
+    line-height: 1.5;
+    border-radius: 0;
+}
+
+
+.breadcrumb {
+    background-color: #FFF;
+}
+
+.modal-backdrop {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    opacity: 0.5;
 }
 
 .list-group-item.active:hover {
@@ -67,6 +108,12 @@
 
 .push-right {
   float: right;
+}
+.hidden {
+     display:none;
+}
+.push-left {
+  float: left;
 }
 
 .card-footer-resultados {

@@ -25,8 +25,9 @@ public class Comentario extends Auditable<String>  {
     @JoinColumn
     private Proyecto proyecto;
 
-    @ManyToMany
-    private Set<Usuario> creador;
+    @ManyToOne
+    @JoinColumn
+    private Usuario creador;
 
     @ManyToOne
     @JoinColumn

@@ -34,9 +34,9 @@ public class Proyecto extends Auditable<String> {
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
     private Set<Comentario> comentarios;
 
-    // @ManyToMany(mappedBy = "proyectos")
-    // private Set<Usuario> miembros;
-    //
+		@ManyToMany
+		private Set<Usuario> miembros;
+    
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
     private Set<Resultado> resultados;
 

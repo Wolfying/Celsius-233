@@ -31,8 +31,8 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <form action="#" th:action="@{'/proyecto/edit/' + ${proyecto.id}}">
-                <button type="submit" class="btn btn-info btn-sm btn-block">Editar</button>
+              <form action="#" th:if="${admin}" th:action="@{'/proyecto/edit/' + ${proyecto.id}}">
+                <button type="submit" class="btn btn-info btn-sm btn-block"><i class="fa fa-edit"></i> Editar</button>
               </form>
             </div>
           </div>
@@ -41,7 +41,7 @@
         <div class="card mb-3">
           <h5 class="card-header">
           	Comentarios
-	          <button type="button" class="push-right btn btn-primary btn-xs" data-toggle="modal" data-target="#nuevo_comentario"><i class="fa fa-envelope"></i> Añadir comentario</button>
+	          <button type="button" class="push-right btn btn-primary btn-xs" data-toggle="modal" data-target="#nuevo_comentario"><i class="fa fa-plus"></i> Añadir comentario</button>
 	          <!-- MODAL (CREAR FRAGMENTO) -->
 	          <div class="modal"  id="nuevo_comentario">
 	            <div class="modal-dialog" role="document">
@@ -55,6 +55,7 @@
 	                <div class="modal-body">
 	                  <form id="form_nuevo_comentario" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
 	                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+	                    <input type="hidden" name="creador" th:value="${usuario.id}" />
 	                    <div class="form-group">
 	                      <label for="texto">Comentario:</label>
 	                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
@@ -75,9 +76,11 @@
             <div class="list-group">
               <div th:each="comentario: ${comentarios}">
                 <div class="d-flex w-100 justify-content-between">
-                  <!-- <h5 class="mb-1">List group item heading</h5> -->
-                  <small>[[${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</small>
-                  <small th:if="${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</small>
+	               	<small>[[${comentario.creador.getNombre()}]]</small>
+	               	<div class="push-right">
+	                  <small>[[${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</small>
+	                  <small th:if="${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</small>
+	                 </div>
                 </div>
                 <p class="mb-1">[[${comentario.texto}]]</p>
                 <!-- <small> -->
@@ -93,133 +96,248 @@
         </div>
         <!-- COMENTARIOS END -->
       </div>
-      <!-- BLOG -->
+      <!-- TABS -->
       <div class="col-md-8">
-        <div class="card no-border-bottom mb-3">
-          <div class="card-header">
-            <h3>
-              Blog de avances
-              <button type="button" class="btn btn-primary push-right" data-toggle="modal" data-target="#nuevo_resultado"><i class="fa fa-envelope"></i> Añadir resultado</button>
-            </h3>
-          </div>
-          <!-- MODAL (CREAR FRAGMENTO) -->
-          <div class="modal"  id="nuevo_resultado">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Nuevo resultado</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form id="form_nuevo_resultado" th:action="@{/proyecto/resultado/create}" th:object="${resultado}" method="post">
-                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
-                    <div class="form-group">
-                      <label for="titulo">Título:</label>
-                      <input type="text" class="form-control" placeholder="..." th:field="*{titulo}" required></input>
-                    </div>
-                    <div class="form-group">
-                      <label for="subtitulo">Subtítulo:</label>
-                      <input type="text" class="form-control" placeholder="..." th:field="*{subtitulo}"></input>
-                    </div>
-                    <div class="form-group">
-                      <label for="texto">Descripción:</label>
-                      <textarea class="form-control" placeholder="..." th:field="*{descripcion}" rows="10" required></textarea>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <input type="submit" form="form_nuevo_resultado" class="btn btn-primary" value="Crear resultado"/>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- MODAL END (CREAR FRAGMENTO) -->
-
-          <!-- EACH -->
-          <div th:each="resultado: ${resultados}">
-            <div class="card-body">
-              <h5 class="card-title">[[${resultado.titulo}]]</h5>
-              <h6 class="card-subtitle text-muted">[[${resultado.subtitulo}]]</h6>
-            </div>
-            <div class="card-body">
-              <p class="card-text">
-                [[${resultado.descripcion}]]
-              </p>
-            </div>
-            <div class="card-footer-resultados text-muted">
-            	<div class="row">
-            		<div class="col-md-12">
-		              <small>
-		                [[${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]
-		                <div class="push-right" th:if="${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</div>
-		              </small>
-				          <button type="button" class="push-right btn btn-primary btn-xxs" data-toggle="modal" th:data-target="'#nuevo_comentario_resultado'+${resultado.getId()}"><i class="fa fa-envelope"></i> Añadir comentario</button>
-				          <!-- MODAL (CREAR FRAGMENTO) -->
-				          <div class="modal"  th:id="'nuevo_comentario_resultado'+${resultado.getId()}">
-				            <div class="modal-dialog" role="document">
-				              <div class="modal-content">
-				                <!-- <div class="modal-header">
-				                  <h5 class="modal-title">Nuevo comentario</h5>
-				                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				                    <span aria-hidden="true">&times;</span>
-				                  </button>
-				                </div> -->
-				                <div class="modal-body">
-				                  <form th:id="'form_nuevo_comentario_resultado'+${resultado.getId()}" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
-				                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
-				                    <input type="hidden" name="resultado" th:value="${resultado.id}" />
-				                    <div class="form-group">
-				                      <label for="texto">Comentario:</label>
-				                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
-				                    </div>
-				                  </form>
-				                </div>
-				                <div class="modal-footer">
-				                  <input type="submit" th:form="'form_nuevo_comentario_resultado'+${resultado.getId()}" class="btn btn-primary" value="Crear comentario"/>
-				                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-				                </div>
-				              </div>
-				            </div>
-			            </div>
-            		</div>
-            	</div>
-		          <!-- MODAL END (CREAR FRAGMENTO) -->
-	            <!-- EACH -->
-	            <div class="list-group">
-	              <div th:each="comentario: ${resultados_comentarios}">
-		              <div th:if="${comentario.getResultado().getId() == resultado.getId()}">
-		                <hr class="my-1">
-		                <div class="d-flex w-100 justify-content-between">
-		                  <!-- <h5 class="mb-1">List group item heading</h5> -->
-		                  <small>[[${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</small>
-		                  <small th:if="${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</small>
+	      <ul class="nav nav-tabs">
+				  <li class="nav-item">
+				  </li>
+				  <li class="nav-item">
+				  </li>
+				</ul>
+				<div id="myTabContent" class="tab-content">
+				  <div class="tab-pane fade active show" id="resultados">
+			      <!-- BLOG -->
+		        <div class="card no-border-bottom mb-3">
+		          <div class="card-header">
+		            <h3>
+		            	<div class="">
+								    <a class="active" data-toggle="tab" href="#resultados">Blog de avances</a>
+								     / 
+								    <a class="" data-toggle="tab" href="#estadisticas">Estadisticas</a>
+			              <button type="button" th:if="${not anonimo}" class="btn btn-primary push-right" data-toggle="modal" data-target="#nuevo_resultado"><i class="fa fa-plus"></i> Añadir resultado</button>
+		              </div>
+		            </h3>
+		          </div>
+		          <!-- MODAL (CREAR FRAGMENTO) -->
+		          <div class="modal"  id="nuevo_resultado">
+		            <div class="modal-dialog" role="document">
+		              <div class="modal-content">
+		                <div class="modal-header">
+		                  <h5 class="modal-title">Nuevo resultado</h5>
+		                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		                    <span aria-hidden="true">&times;</span>
+		                  </button>
 		                </div>
-		                <p class="mb-1">[[${comentario.texto}]]</p>
-		                <!-- <small> -->
-		                  <!-- [[ -->
-		                  <!-- ${comentario.creador.getNombre()} -->
-		                  <!-- ]] -->
-		                <!-- </small> -->
+		                <div class="modal-body">
+		                  <form id="form_nuevo_resultado" th:action="@{/proyecto/resultado/create}" th:object="${resultado}" method="post">
+		                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+		                    <div class="form-group">
+		                      <label for="titulo">Título:</label>
+		                      <input type="text" class="form-control" placeholder="..." th:field="*{titulo}" required></input>
+		                    </div>
+		                    <div class="form-group">
+		                      <label for="texto">Descripción:</label>
+		                      <textarea class="form-control" placeholder="..." th:field="*{descripcion}" rows="3" required></textarea>
+		                    </div>
+		                    <div class="form-group">
+		                    	<label for="job">Trabajo:</label>
+		                      <select class="form-control" th:field="*{job}" required>                      
+		                      	<option th:each="job_disponible : ${jobs}" th:value="${job_disponible.id}" th:text="${job_disponible.getMaquina()}">
+		                      	</option>
+		                      </select>
+		                    </div>
+		                    <div class="form-group">
+		                      <label for="tiempo_dedicado">Tiempo dedicado:</label>
+		                      <input type="time" class="form-control" th:field="*{tiempo_dedicado}" required></input>
+		                    </div>
+		                    <!-- <div class="newjob">
+		                    </div>
+		                    <button type="button" onclick="addFields()">Insert new row</button> -->
+		                  </form>
+		                </div>
+		                <div class="modal-footer">
+		                  <input type="submit" form="form_nuevo_resultado" class="btn btn-primary" value="Crear resultado"/>
+		                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+		                </div>
+		              </div>
+		            </div>
+		          </div>
+		          <!-- MODAL END (CREAR FRAGMENTO) -->
+		
+		          <!-- EACH -->
+		          <div th:each="resultado: ${resultados}">
+		            <div class="card-body">
+		              <h5 class="card-title">
+		              	[[${resultado.titulo}]]
+			              <small class="push-right">
+			                Creado: [[${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]
+			                <div class="push-right" th:if="${#dates.format(resultado.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(resultado.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]
+			                </div>
+			              </small>
+		              </h5>
+		              <p class="card-text">
+		                [[${resultado.descripcion}]]
+		              </p>
+		              <h5>Trabajos realizados:</h5>
+		              <table class="table table-hover">
+									  <thead>
+									    <tr>
+									      <th scope="col">Máquina utilizada</th>
+									      <th scope="col">Materia prima</th>
+									      <th scope="col">Por</th>
+									      <th scope="col">Tiempo dedicado</th>
+									    </tr>
+									  </thead>
+									  <tbody>
+									    <tr class="table-default">
+									      <th scope="row">[[${resultado.job.getMaquina()}]]</th>
+									      <td>[[${resultado.job.getMateria_prima()}]]</td>
+									      <td>[[${resultado.job.getUsuario().getNombre()}]]</td>
+									      <td>[[${resultado.getTiempo_dedicado()}]] Hrs</td>
+									    </tr>
+									   </tbody>
+								   </table>
+		            </div>
+		            <div class="card-footer-resultados text-muted">
+		            	<div class="row">
+		            		<div class="col-md-12">
+				              <small th:if="${resultado.getComentarios().size() > 0}">
+				                &nbsp&nbspComentarios:
+						          <button class="btn btn-primary btn-xxs-alt nav-toggle push-left" th:href="'#resultado_'+${resultado.getId()}"><i class="fa fa-arrow-down"></i></button>
+				              </small>
+				              <button type="button" th:if="${not anonimo}" class="push-right btn btn-primary btn-xxs" data-toggle="modal" th:data-target="'#nuevo_comentario_resultado'+${resultado.getId()}"><i class="fa fa-plus"></i> Añadir comentario</button>
+						          <!-- MODAL (CREAR FRAGMENTO) -->
+						          <div class="modal"  th:id="'nuevo_comentario_resultado'+${resultado.getId()}">
+						            <div class="modal-dialog" role="document">
+						              <div class="modal-content">
+						                <!-- <div class="modal-header">
+						                  <h5 class="modal-title">Nuevo comentario</h5>
+						                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						                    <span aria-hidden="true">&times;</span>
+						                  </button>
+						                </div> -->
+						                <div class="modal-body">
+						                  <form th:id="'form_nuevo_comentario_resultado'+${resultado.getId()}" th:action="@{/proyecto/comentario/create}" th:object="${comentario}" method="post">
+						                    <input type="hidden" name="proyecto" th:value="${proyecto.id}" />
+						                    <input type="hidden" name="resultado" th:value="${resultado.id}" />
+						                    <input type="hidden" name="creador" th:value="${usuario.id}" />
+						                    <div class="form-group">
+						                      <label for="texto">Comentario:</label>
+						                      <textarea class="form-control comentario-texto" placeholder="..." th:field="*{texto}" rows="10" required></textarea>
+						                    </div>
+						                  </form>
+						                </div>
+						                <div class="modal-footer">
+						                  <input type="submit" th:form="'form_nuevo_comentario_resultado'+${resultado.getId()}" class="btn btn-primary" value="Crear comentario"/>
+						                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+						                </div>
+						              </div>
+						            </div>
+					            </div>
+				          		<!-- MODAL END (CREAR FRAGMENTO) -->
+		            		</div>
+		            	</div>
+			            <!-- EACH -->
+			            <div class="list-group" style="display:none" th:id="'resultado_'+${resultado.getId()}">
+			              <div th:each="comentario: ${resultados_comentarios}">
+				              <div th:if="${comentario.getResultado().getId() == resultado.getId()}">
+				                <hr class="my-1">
+				                <div class="d-flex w-100 justify-content-between">
+			               			<small>[[${comentario.creador.getNombre()}]]</small>
+				                	<div class="push-right">
+					                  <small>[[${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm')}]]</small>
+					                  <small th:if="${#dates.format(comentario.fecha_creacion, 'dd-MM-yyyy HH:mm') != #dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}">Modificado: [[${#dates.format(comentario.fecha_modificacion, 'dd-MM-yyyy HH:mm')}]]</small>
+				                  </div>
+				                </div>
+				                <p class="mb-1">[[${comentario.texto}]]</p>
+				              </div>
+			              </div>
+			            </div>
+			            <!-- END EACH -->
+		            </div>
+		          </div>
+		          <!-- END EACH -->
+		        </div>
+			      <!-- BLOG END -->
+				  </div>
+				  <div class="tab-pane" id="estadisticas">
+				  	<!-- ESTADISTICAS -->
+		        <div class="card  mb-3">
+				  		<div class="card-header">
+		            <h3>
+		            	<div class="">
+								    <a class="" data-toggle="tab" href="#resultados">Blog de avances</a>
+								     / 
+								    <a class="active" data-toggle="tab" href="#estadisticas">Estadisticas</a>
+		              </div>
+		            </h3>
+		          </div>
+	            <div class="card-body">
+	              <h5 class="card-title">
+	              </h5>
+	              <div class="row">
+		              <div class="col-lg-6">
+		              	<dl class="row mb-0">
+		              		<div class="col-sm-6 text-sm-right"><dt>Horas totales trabajadas:</dt></div>
+		              		<div class="col-sm-6 text-sm-left"><dd class="mb-0">[[${resultados.size()}]]</dd></div>
+		              	</dl>
+		              	<dl class="row mb-0">
+		              		<div class="col-sm-6 text-sm-right"><dt>Máquinas más usadas:</dt></div>
+		              		<div class="col-sm-6 text-sm-left"><dd class="mb-0">[[${resultados.size()}]]</dd></div>
+		              	</dl>
+		              	<dl class="row mb-0">
+		              		<div class="col-sm-6 text-sm-right"><dt>Materias primas usadas:</dt></div>
+		              		<div class="col-sm-6 text-sm-left"><dd class="mb-0">[[${resultados.size()}]]</dd></div>
+		              	</dl>
 		              </div>
 	              </div>
-	            </div>
-	            <!-- END EACH -->
-            </div>
-          </div>
-          <!-- END EACH -->
-        </div>
-      </div>
-      <!-- BLOG END -->
+		         	</div>
+							<div class="card-footer text-muted">
+							</div>
+				  	</div>
+				  	<!-- ESTADISTICAS END -->
+					</div>
+				</div>
+			</div>
+			<!-- TABS END -->
     </div>
   </div>
   <th:block layout:fragment="scripts">
     <script type="text/javascript">
-      $(".modal").on("hidden.bs.modal", function(){
-        $(".comentario-texto").html("");
-      });
+	    $(".modal").on("hidden.bs.modal", function(){
+	    	$(".modal-body").find("input,textarea,select").val('').end();
+	    });
+	    
+	    function addFields()
+	    {
+	        $(".newjob").last().html(
+	        	'<div class="form-group">'+
+		        '	<label for="job">Trabajo:</label>'+
+		        '  <select class="form-control" th:field="*{job}" required>'+
+		        '  	<option th:each="job_disponible : ${jobs}" th:value="${job_disponible.id}" th:text="${job_disponible.getMaquina()}">'+
+		        ' 	</option>'+
+		        '  </select>'+
+		        '</div>'+
+		        '<div class="form-group">'+
+		        '  <label for="tiempo_dedicado">Tiempo dedicado:</label>'+
+		        '  <input type="time" class="form-control" th:field="*{tiempo_dedicado}" required></input>'+
+		        '</div>'+
+		        '<div class="newjob">'+
+		        '</div>'
+		        )
+	    }
+	    
+	    $('.nav-toggle').click(function(){
+				var collapse_content_selector = $(this).attr('href');
+				var toggle_switch = $(this);
+				$(collapse_content_selector).toggle(function(){
+				  if($(this).css('display')=='none'){
+						toggle_switch.html('<i class="fa fa-arrow-down"></i>');
+				  } else {
+						toggle_switch.html('<i class="fa fa-arrow-up"></i>');
+				  }
+				});
+		  });
     </script>
   </th:block>
 </html>

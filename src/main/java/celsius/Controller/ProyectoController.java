@@ -2,10 +2,14 @@ package celsius.Controller;
 
 import celsius.Model.Proyecto;
 import celsius.Model.Comentario;
+import celsius.Model.Job;
 import celsius.Model.Resultado;
+import celsius.Model.Usuario;
 import celsius.Repository.ProyectoRepository;
 import celsius.Repository.ComentarioRepository;
+import celsius.Repository.JobRepository;
 import celsius.Repository.ResultadoRepository;
+import celsius.Repository.UsuarioRepository;
 import celsius.Helper.MessageHelper;
 import celsius.Helper.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.ui.Model;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -40,6 +43,12 @@ public class ProyectoController {
 
     @Autowired
     ResultadoRepository resultadoRepository;
+    
+    @Autowired
+    UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    JobRepository jobRepository;
 
     @ModelAttribute(value = "comentario")
     public Comentario getComentario() {
@@ -50,6 +59,16 @@ public class ProyectoController {
     public Resultado getResultado() {
       return new Resultado();
     }
+    
+    @ModelAttribute
+    public void addAttributes(Model model) {
+    	Usuario usuario = usuarioRepository.getEnabled();
+    	model.addAttribute("admin", (usuario.getRol().name() == "ADMINISTRADOR" ? true : false));
+    	model.addAttribute("anonimo", (usuario.getRol().name() == "ANONIMO" ? true : false));
+    	model.addAttribute("miembro", (usuario.getRol().name() == "MIEMBRO" ? true : false));
+    	model.addAttribute("ayudante", (usuario.getRol().name() == "AYUDANTE" ? true : false));
+    	model.addAttribute("usuario", usuario);
+    }
 
     @GetMapping(value={"/{id}", "/index/{id}"})
     public String getProyecto(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
@@ -57,10 +76,11 @@ public class ProyectoController {
       if (!optProyecto.isPresent()) {
         //ERROR
         MessageHelper.addErrorAttribute(ra, "Error al ir a la página del proyecto. Proyecto no encontrado.");
-        return "";
+        return "redirect:/proyecto/";
       }
       List<Comentario> comentarios = comentarioRepository.findComentariosProyecto(optProyecto.get());
       List<Resultado> resultados = resultadoRepository.findResultados(optProyecto.get());
+      List<Job> jobs = jobRepository.findJobs(usuarioRepository.getEnabled());
       List<List<Comentario>> resultados_comentarios;
       int contador_resultados_comentarios;
       if (!resultados.isEmpty()) {
@@ -73,6 +93,7 @@ public class ProyectoController {
       model.addAttribute("proyecto", optProyecto.get());
       model.addAttribute("comentarios", comentarios);
       model.addAttribute("resultados", resultados);
+      model.addAttribute("jobs", jobs);
       model.addAttribute("resultados_comentarios", resultados_comentarios);
       model.addAttribute("contador_comentarios", comentarios.size());
       model.addAttribute("contador_resultados_comentarios", contador_resultados_comentarios);
@@ -149,8 +170,8 @@ public class ProyectoController {
         MessageHelper.addErrorAttribute(ra, "Error al eliminar proyecto, proyecto no encontrado.");
       } else {
         MessageHelper.addErrorAttribute(ra, "Proyecto eliminado con éxito.");
+        proyectoRepository.delete(optProyecto.get());
       }
-      proyectoRepository.delete(optProyecto.get());
       model.addAttribute("proyectos", proyectoRepository.findAll());
       return "redirect:/proyecto/list";
     }
@@ -158,29 +179,27 @@ public class ProyectoController {
     // POST guarda nuevo comentario
     @PostMapping(value = {"/comentario/create", "/comantario/crear"})
     public String saveComentario(@ModelAttribute("comentario") Comentario comentario, BindingResult errors, Model model, RedirectAttributes ra) {
-      comentarioRepository.save(comentario);
       if (!errors.hasErrors()) {
         MessageHelper.addSuccessAttribute(ra, "Comentario creado con éxito.");
+        comentarioRepository.save(comentario);
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al crear comentario.");
       }
       return "redirect:/proyecto/index/"+comentario.getProyecto().getId();
     }
-
+    
     // POST guarda nuevo resultado
     @PostMapping(value = {"/resultado/create", "/resultado/crear"})
-    public String saveComentario(@ModelAttribute("resultado") Resultado resultado, BindingResult errors, Model model, RedirectAttributes ra) {
-      resultadoRepository.save(resultado);
+    public String saveResultado(@ModelAttribute("resultado") Resultado resultado, BindingResult errors, Model model, RedirectAttributes ra) {
       if (!errors.hasErrors()) {
         MessageHelper.addSuccessAttribute(ra, "Resultado creado con éxito.");
+        resultadoRepository.save(resultado);
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al crear resultado.");
       }
       return "redirect:/proyecto/index/"+resultado.getProyecto().getId();
     }
     
-
-
     // GET editar proyecto
     @GetMapping(value = {"/resolve/{id}", "/resolver/{id}"})
     public String resolveProyecto(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
