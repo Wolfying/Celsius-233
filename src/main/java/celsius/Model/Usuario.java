@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class Usuario extends Auditable<String>   {
     
 		@Enumerated(EnumType.ORDINAL)
     private Rol rol;
+		
 
     private String nombre;
 
@@ -33,10 +35,21 @@ public class Usuario extends Auditable<String>   {
     @Transient
     private String passwordConfirm;
     
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-		private List<UsuarioProyecto> proyectos = new ArrayList<>();
+//    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+//		private List<UsuarioProyecto> proyectos = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "usuario")
+		private Set<UsuarioProyecto> usuarioProyectos = new HashSet<UsuarioProyecto>();
 
-    @OneToMany(mappedBy = "creador")
+		public Set<UsuarioProyecto> getUsuarioProyectos() {
+			return usuarioProyectos;
+		}
+
+		public void setUsuarioProyectos(Set<UsuarioProyecto> usuarioProyectos) {
+			this.usuarioProyectos = usuarioProyectos;
+		}
+
+		@OneToMany(mappedBy = "creador")
     private Set<Comentario> comentarios;
 
     @OneToMany(mappedBy = "usuario")
@@ -135,13 +148,13 @@ public class Usuario extends Auditable<String>   {
 		}
 		
 
-		public List<UsuarioProyecto> getProyectos() {
-			return proyectos;
-		}
-
-		public void setProyectos(List<UsuarioProyecto> proyectos) {
-			this.proyectos = proyectos;
-		}
+//		public List<UsuarioProyecto> getProyectos() {
+//			return proyectos;
+//		}
+//
+//		public void setProyectos(List<UsuarioProyecto> proyectos) {
+//			this.proyectos = proyectos;
+//		}
 
 		public Set<Comentario> getComentarios() {
 			return comentarios;

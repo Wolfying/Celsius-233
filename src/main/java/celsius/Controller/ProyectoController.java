@@ -80,11 +80,13 @@ public class ProyectoController {
     	model.addAttribute("usuario", usuario);
     }
     
-    private String getPermiso() {
+    private String getPermiso(Proyecto proyecto) {
       Usuario usuario = usuarioRepository.getEnabled();
       UsuarioProyecto usuarioProyecto = usuarioProyectoRepository.findByUsuario(usuario);
       if (usuarioProyecto != null) {
-      	return usuarioProyecto.getTipo().name();
+      	if (usuarioProyecto.getProyecto() == proyecto) {
+        	return usuarioProyecto.getTipo().name();
+      	}
       }
       return null;
     }
@@ -121,9 +123,9 @@ public class ProyectoController {
       model.addAttribute("contador_resultados", resultados.size());
       
       //Permiso de miembro en proyecto
-      model.addAttribute("miembro_jefe", (getPermiso() == "JEFE" ? true : false));
-      model.addAttribute("miembro_normal", (getPermiso() == "MIEMBRO" ? true : false));
-      model.addAttribute("miembro_mentor", (getPermiso() == "MENTOR" ? true : false));
+      model.addAttribute("miembro_jefe", (getPermiso(optProyecto.get()) == "JEFE" ? true : false));
+      model.addAttribute("miembro_normal", (getPermiso(optProyecto.get()) == "MIEMBRO" ? true : false));
+      model.addAttribute("miembro_mentor", (getPermiso(optProyecto.get()) == "MENTOR" ? true : false));
       return "proyecto/index";
     }
 
@@ -228,12 +230,10 @@ public class ProyectoController {
     
     // POST agregar miembros al proyecto
     @PostMapping(value={"/add_members", "/agregar_miembros"})
-    public String addMembers(@ModelAttribute("usuarioProyecto") UsuarioProyecto usuarioProyecto,@RequestParam("usuario") Usuario usuario, @RequestParam("proyecto") Long id, BindingResult errors, Model model, RedirectAttributes ra) {
-    	Optional<Proyecto> proyecto = proyectoRepository.findById(id);
-    	if (!errors.hasErrors() && proyecto.isPresent()) {
+    public String addMembers(@ModelAttribute("usuarioProyecto") UsuarioProyecto usuarioProyecto, BindingResult errors, Model model, RedirectAttributes ra) {
+    	if (!errors.hasErrors()) {
         MessageHelper.addSuccessAttribute(ra, "Miembro añadido con éxito.");
-        proyecto.get().addUsuario(usuario);
-//        usuarioProyectoRepository.save(usuarioProyecto);
+        usuarioProyectoRepository.save(usuarioProyecto);
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al agregar miembro.");
       }

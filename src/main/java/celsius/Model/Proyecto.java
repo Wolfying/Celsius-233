@@ -14,6 +14,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -46,20 +47,32 @@ public class Proyecto extends Auditable<String> {
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
     private Set<Resultado> resultados;
 
-		@OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
-		private List<UsuarioProyecto> usuarios = new ArrayList<>();
-		
-    public Long getId() {
+//		@OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
+//		private List<UsuarioProyecto> usuarios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proyecto")
+    private Set<UsuarioProyecto> usuarioProyectos = new HashSet<UsuarioProyecto>();
+    
+    
+		public Set<UsuarioProyecto> getUsuarioProyectos() {
+			return usuarioProyectos;
+		}
+
+		public void setUsuarioProyectos(Set<UsuarioProyecto> usuarioProyectos) {
+			this.usuarioProyectos = usuarioProyectos;
+		}
+
+		public Long getId() {
 			return id;
 		}
 
-		public List<UsuarioProyecto> getUsuarios() {
-			return usuarios;
-		}
-
-		public void setUsuarios(List<UsuarioProyecto> usuarios) {
-			this.usuarios = usuarios;
-		}
+//		public List<UsuarioProyecto> getUsuarios() {
+//			return usuarios;
+//		}
+//
+//		public void setUsuarios(List<UsuarioProyecto> usuarios) {
+//			this.usuarios = usuarios;
+//		}
 
 		public void setId(Long id) {
 			this.id = id;
@@ -142,23 +155,23 @@ public class Proyecto extends Auditable<String> {
         }
     }
 		
-		public void addUsuario(Usuario usuario) {
-			UsuarioProyecto usuarioProyecto = new UsuarioProyecto(usuario, this);
-			usuarios.add(usuarioProyecto);
-			usuario.getProyectos().add(usuarioProyecto);
-		}
-		
-		public void removeUsuario(Usuario usuario) {
-			for (Iterator<UsuarioProyecto> iterator = usuarios.iterator(); iterator.hasNext();) {
-				UsuarioProyecto usuarioProyecto = iterator.next();
-				if (usuarioProyecto.getProyecto().equals(this) && usuarioProyecto.getUsuario().equals(usuarios)) {
-					iterator.remove();
-					usuarioProyecto.getUsuario().getProyectos().remove(usuarioProyecto);
-					usuarioProyecto.setProyecto(null);
-					usuarioProyecto.setUsuario(null);
-				}
-			}
-		}
+//		public void addUsuario(Usuario usuario) {
+//			UsuarioProyecto usuarioProyecto = new UsuarioProyecto(usuario, this);
+//			usuarios.add(usuarioProyecto);
+//			usuario.getProyectos().add(usuarioProyecto);
+//		}
+//		
+//		public void removeUsuario(Usuario usuario) {
+//			for (Iterator<UsuarioProyecto> iterator = usuarios.iterator(); iterator.hasNext();) {
+//				UsuarioProyecto usuarioProyecto = iterator.next();
+//				if (usuarioProyecto.getProyecto().equals(this) && usuarioProyecto.getUsuario().equals(usuarios)) {
+//					iterator.remove();
+//					usuarioProyecto.getUsuario().getProyectos().remove(usuarioProyecto);
+//					usuarioProyecto.setProyecto(null);
+//					usuarioProyecto.setUsuario(null);
+//				}
+//			}
+//		}
 		
 		@Override
     public boolean equals(Object o) {

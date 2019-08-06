@@ -13,19 +13,28 @@ import java.util.Objects;
 @Entity
 @Table
 public class UsuarioProyecto extends Auditable<String> {
-	@EmbeddedId
-	private UsuarioProyectoId id;
+//	@EmbeddedId
+//	private UsuarioProyectoId id;
 	
+	@Id
+  @GeneratedValue
+	private long id;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("usuario_id")
 	private Usuario usuario;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("proyecto_id")
 	private Proyecto proyecto;
 	
 	private Tipo tipo;
 
+  public long getId() {
+      return id;
+  }
+  
+	public void setId(long id) {
+    this.id = id;
+	}
+	
 	public Tipo getTipo() {
 		return tipo;
 	}
@@ -36,11 +45,11 @@ public class UsuarioProyecto extends Auditable<String> {
 
 	public UsuarioProyecto() {}
 	
-	UsuarioProyecto(Usuario usuario, Proyecto proyecto) {
-		this.usuario = usuario;
-		this.proyecto = proyecto;
-		this.id = new UsuarioProyectoId(usuario.getId(), proyecto.getId());
-	}
+//	UsuarioProyecto(Usuario usuario, Proyecto proyecto) {
+//		this.usuario = usuario;
+//		this.proyecto = proyecto;
+//		this.id = new UsuarioProyectoId(usuario.getId(), proyecto.getId());
+//	}
 	
 	public static enum Tipo {
     JEFE("Jefe de Proyecto", "warning"),
@@ -84,14 +93,6 @@ public class UsuarioProyecto extends Auditable<String> {
   public int hashCode() {
       return Objects.hash(usuario, proyecto);
   }
-
-	public UsuarioProyectoId getId() {
-		return id;
-	}
-
-	public void setId(UsuarioProyectoId id) {
-		this.id = id;
-	}
 
 	public Usuario getUsuario() {
 		return usuario;
