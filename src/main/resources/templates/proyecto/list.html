@@ -29,7 +29,7 @@
             <td>
               <div class="btn-group btn-group-toggle">
                 <form action="#" th:action="@{'/proyecto/index/' + ${proyecto.id}}">
-                  <button type="submit"  class="btn btn-primary"><i class="fa fa-plus"></i> Ver Proyecto</button>
+                  <button type="submit"  class="btn btn-success"><i class="fa fa-search"></i> Ver Proyecto</button>
                 </form>
                 <form action="#" th:if="${admin}" th:action="@{'/proyecto/resolve/' + ${proyecto.id}}">
                   <button type="submit"  class="btn btn-info"><i class="fa fa-edit"></i> Resolver</button>

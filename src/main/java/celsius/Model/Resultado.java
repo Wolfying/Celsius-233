@@ -39,4 +39,62 @@ public class Resultado extends Auditable<String>   {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id")
     private Job job;
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getDescripcion() {
+			return descripcion;
+		}
+
+		public void setDescripcion(String descripcion) {
+			this.descripcion = descripcion;
+		}
+
+		public String getTitulo() {
+			return titulo;
+		}
+
+		public void setTitulo(String titulo) {
+			this.titulo = titulo;
+		}
+
+		public Proyecto getProyecto() {
+			return proyecto;
+		}
+
+		public void setProyecto(Proyecto proyecto) {
+			this.proyecto = proyecto;
+		}
+
+		public LocalTime getTiempo_dedicado() {
+			return tiempo_dedicado;
+		}
+
+		public void setTiempo_dedicado(LocalTime tiempo_dedicado) {
+			this.tiempo_dedicado = tiempo_dedicado;
+		}
+
+		public Set<Comentario> getComentarios() {
+			return comentarios;
+		}
+
+		public void setComentarios(Set<Comentario> comentarios) {
+			this.comentarios = comentarios;
+		}
+
+		public Job getJob() {
+			return job;
+		}
+
+		public void setJob(Job job) {
+			this.job = job;
+		}
+    
+    
 }

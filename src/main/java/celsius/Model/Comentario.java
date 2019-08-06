@@ -32,4 +32,46 @@ public class Comentario extends Auditable<String>  {
     @ManyToOne
     @JoinColumn
     private Resultado resultado;
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getTexto() {
+			return texto;
+		}
+
+		public void setTexto(String texto) {
+			this.texto = texto;
+		}
+
+		public Proyecto getProyecto() {
+			return proyecto;
+		}
+
+		public void setProyecto(Proyecto proyecto) {
+			this.proyecto = proyecto;
+		}
+
+		public Usuario getCreador() {
+			return creador;
+		}
+
+		public void setCreador(Usuario creador) {
+			this.creador = creador;
+		}
+
+		public Resultado getResultado() {
+			return resultado;
+		}
+
+		public void setResultado(Resultado resultado) {
+			this.resultado = resultado;
+		}
+    
+    
 }

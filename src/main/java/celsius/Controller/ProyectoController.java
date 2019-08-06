@@ -5,10 +5,12 @@ import celsius.Model.Comentario;
 import celsius.Model.Job;
 import celsius.Model.Resultado;
 import celsius.Model.Usuario;
+import celsius.Model.UsuarioProyecto;
 import celsius.Repository.ProyectoRepository;
 import celsius.Repository.ComentarioRepository;
 import celsius.Repository.JobRepository;
 import celsius.Repository.ResultadoRepository;
+import celsius.Repository.UsuarioProyectoRepository;
 import celsius.Repository.UsuarioRepository;
 import celsius.Helper.MessageHelper;
 import celsius.Helper.UpdateHelper;
@@ -49,6 +51,9 @@ public class ProyectoController {
     
     @Autowired
     JobRepository jobRepository;
+    
+    @Autowired
+    UsuarioProyectoRepository usuarioProyectoRepository;
 
     @ModelAttribute(value = "comentario")
     public Comentario getComentario() {
@@ -59,6 +64,11 @@ public class ProyectoController {
     public Resultado getResultado() {
       return new Resultado();
     }
+
+    @ModelAttribute(value = "usuarioProyecto")
+    public UsuarioProyecto getUsuarioProyecto() {
+      return new UsuarioProyecto();
+    }
     
     @ModelAttribute
     public void addAttributes(Model model) {
@@ -68,6 +78,15 @@ public class ProyectoController {
     	model.addAttribute("miembro", (usuario.getRol().name() == "MIEMBRO" ? true : false));
     	model.addAttribute("ayudante", (usuario.getRol().name() == "AYUDANTE" ? true : false));
     	model.addAttribute("usuario", usuario);
+    }
+    
+    private String getPermiso() {
+      Usuario usuario = usuarioRepository.getEnabled();
+      UsuarioProyecto usuarioProyecto = usuarioProyectoRepository.findByUsuario(usuario);
+      if (usuarioProyecto != null) {
+      	return usuarioProyecto.getTipo().name();
+      }
+      return null;
     }
 
     @GetMapping(value={"/{id}", "/index/{id}"})
@@ -80,6 +99,7 @@ public class ProyectoController {
       }
       List<Comentario> comentarios = comentarioRepository.findComentariosProyecto(optProyecto.get());
       List<Resultado> resultados = resultadoRepository.findResultados(optProyecto.get());
+      List<Usuario> usuarios = usuarioRepository.findAll();
       List<Job> jobs = jobRepository.findJobs(usuarioRepository.getEnabled());
       List<List<Comentario>> resultados_comentarios;
       int contador_resultados_comentarios;
@@ -91,6 +111,7 @@ public class ProyectoController {
       	contador_resultados_comentarios = 0;
       }
       model.addAttribute("proyecto", optProyecto.get());
+      model.addAttribute("usuarios", usuarios);
       model.addAttribute("comentarios", comentarios);
       model.addAttribute("resultados", resultados);
       model.addAttribute("jobs", jobs);
@@ -98,6 +119,11 @@ public class ProyectoController {
       model.addAttribute("contador_comentarios", comentarios.size());
       model.addAttribute("contador_resultados_comentarios", contador_resultados_comentarios);
       model.addAttribute("contador_resultados", resultados.size());
+      
+      //Permiso de miembro en proyecto
+      model.addAttribute("miembro_jefe", (getPermiso() == "JEFE" ? true : false));
+      model.addAttribute("miembro_normal", (getPermiso() == "MIEMBRO" ? true : false));
+      model.addAttribute("miembro_mentor", (getPermiso() == "MENTOR" ? true : false));
       return "proyecto/index";
     }
 
@@ -198,6 +224,20 @@ public class ProyectoController {
         MessageHelper.addErrorAttribute(ra, "Error al crear resultado.");
       }
       return "redirect:/proyecto/index/"+resultado.getProyecto().getId();
+    }
+    
+    // POST agregar miembros al proyecto
+    @PostMapping(value={"/add_members", "/agregar_miembros"})
+    public String addMembers(@ModelAttribute("usuarioProyecto") UsuarioProyecto usuarioProyecto,@RequestParam("usuario") Usuario usuario, @RequestParam("proyecto") Long id, BindingResult errors, Model model, RedirectAttributes ra) {
+    	Optional<Proyecto> proyecto = proyectoRepository.findById(id);
+    	if (!errors.hasErrors() && proyecto.isPresent()) {
+        MessageHelper.addSuccessAttribute(ra, "Miembro añadido con éxito.");
+        proyecto.get().addUsuario(usuario);
+//        usuarioProyectoRepository.save(usuarioProyecto);
+      } else {
+        MessageHelper.addErrorAttribute(ra, "Error al agregar miembro.");
+      }
+    	return "redirect:/proyecto/index/"+usuarioProyecto.getProyecto().getId();
     }
     
     // GET editar proyecto
