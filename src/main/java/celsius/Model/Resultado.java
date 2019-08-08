@@ -1,51 +1,100 @@
 package celsius.Model;
+
+import lombok.AccessLevel;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalTime;
 import java.util.Set;
 
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @Entity
-public class Resultado {
+public class Resultado extends Auditable<String>   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Proyecto under;
+    
+    @Column(columnDefinition = "TEXT")
+    private String titulo;
 
     @ManyToOne
-    private Comentario comentario;
+    @JoinColumn
+    private Proyecto proyecto;
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    private LocalTime tiempo_dedicado;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "resultado", cascade = CascadeType.ALL)
+    private Set<Comentario> comentarios;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id")
+    private Job job;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+		public Long getId() {
+			return id;
+		}
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+		public void setId(Long id) {
+			this.id = id;
+		}
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+		public String getDescripcion() {
+			return descripcion;
+		}
 
-    public Proyecto getUnder() {
-        return under;
-    }
+		public void setDescripcion(String descripcion) {
+			this.descripcion = descripcion;
+		}
 
-    public void setUnder(Proyecto under) {
-        this.under = under;
-    }
+		public String getTitulo() {
+			return titulo;
+		}
 
-    public Comentario getComentario() {
-        return comentario;
-    }
+		public void setTitulo(String titulo) {
+			this.titulo = titulo;
+		}
 
-    public void setComentario(Comentario comentario) {
-        this.comentario = comentario;
-    }
+		public Proyecto getProyecto() {
+			return proyecto;
+		}
+
+		public void setProyecto(Proyecto proyecto) {
+			this.proyecto = proyecto;
+		}
+
+		public LocalTime getTiempo_dedicado() {
+			return tiempo_dedicado;
+		}
+
+		public void setTiempo_dedicado(LocalTime tiempo_dedicado) {
+			this.tiempo_dedicado = tiempo_dedicado;
+		}
+
+		public Set<Comentario> getComentarios() {
+			return comentarios;
+		}
+
+		public void setComentarios(Set<Comentario> comentarios) {
+			this.comentarios = comentarios;
+		}
+
+		public Job getJob() {
+			return job;
+		}
+
+		public void setJob(Job job) {
+			this.job = job;
+		}
+    
+    
 }

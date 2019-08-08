@@ -1,83 +1,77 @@
 package celsius.Model;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+
+
 import java.util.Date;
 import java.util.Set;
 
+@Setter(AccessLevel.PUBLIC)
+@Getter(AccessLevel.PUBLIC)
 @Entity
-public class Comentario {
+public class Comentario extends Auditable<String>  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-
+    private Long id;
+    
+    @Column(columnDefinition = "TEXT")
     private String texto;
 
-    private Date fecha_creacion;
+    @ManyToOne
+    @JoinColumn
+    private Proyecto proyecto;
 
-    private Date fecha_modificacion;
+    @ManyToOne
+    @JoinColumn
+    private Usuario creador;
 
-    @ManyToMany
-    private Set<Usuario> creador;
+    @ManyToOne
+    @JoinColumn
+    private Resultado resultado;
 
-    @ManyToMany(mappedBy = "comentarios")
-    private Set<Proyecto> proyectos;
+		public Long getId() {
+			return id;
+		}
 
-    @OneToMany(mappedBy = "comentario")
-    private Set<Resultado> resultados;
+		public void setId(Long id) {
+			this.id = id;
+		}
 
+		public String getTexto() {
+			return texto;
+		}
 
-    public Long getId() {
-        return Id;
-    }
+		public void setTexto(String texto) {
+			this.texto = texto;
+		}
 
-    public void setId(Long id) {
-        Id = id;
-    }
+		public Proyecto getProyecto() {
+			return proyecto;
+		}
 
-    public String getTexto() {
-        return texto;
-    }
+		public void setProyecto(Proyecto proyecto) {
+			this.proyecto = proyecto;
+		}
 
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
+		public Usuario getCreador() {
+			return creador;
+		}
 
-    public Date getFecha_creacion() {
-        return fecha_creacion;
-    }
+		public void setCreador(Usuario creador) {
+			this.creador = creador;
+		}
 
-    public void setFecha_creacion(Date fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
-    }
+		public Resultado getResultado() {
+			return resultado;
+		}
 
-    public Date getFecha_modificacion() {
-        return fecha_modificacion;
-    }
-
-    public void setFecha_modificacion(Date fecha_modificacion) {
-        this.fecha_modificacion = fecha_modificacion;
-    }
-
-    public Set<Usuario> getCreador() {
-        return creador;
-    }
-
-    public void setCreador(Set<Usuario> creador) {
-        this.creador = creador;
-    }
-
-    public Set<Proyecto> getProyectos() {
-        return proyectos;
-    }
-
-    public void setProyectos(Set<Proyecto> proyectos) {
-        this.proyectos = proyectos;
-    }
-
-    public Set<Resultado> getResultados() {
-        return resultados;
-    }
-
-    public void setResultados(Set<Resultado> resultados) {
-        this.resultados = resultados;
-    }
+		public void setResultado(Resultado resultado) {
+			this.resultado = resultado;
+		}
+    
+    
 }
