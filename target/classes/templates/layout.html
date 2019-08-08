@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <meta name="description" content=""/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <div th:replace="fragments/header :: header"></div>
+  </head>
+  <body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <div class="container container-80">
+      <nav aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb">
+              <th:block layout:fragment="breadcrumb">
+              </th:block>
+          </ol>
+      </nav>
+      <th:block th:if="${message != null}">
+        <!-- /* The message code is returned from the @Controller */ -->
+        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=${message.message})">&nbsp;</div>
+      </th:block>
+      <!-- Content -->
+      <div class="content">
+          <div layout:fragment="page_content"></div>
+      </div>
+      <!-- End Content -->
+    </div>
+    <!-- /.container -->
+    <div th:replace="fragments/scripts :: scripts"></div>
+    <div th:replace="fragments/footer :: footer"></div>
+  </body>
+</html>

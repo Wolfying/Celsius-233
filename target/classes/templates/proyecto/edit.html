@@ -1,0 +1,41 @@
+<html layout:decorate="~{layout}">
+  <head>
+    <title>Editar Proyecto</title>
+  </head>
+  <th:block layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="/proyecto/list">Listado</a></li>
+    <li class="breadcrumb-item"><a th:href="@{'/proyecto/index/'+${proyecto.id}}">Proyecto</a></li>
+    <li class="breadcrumb-item active">Editar</li>
+  </th:block>
+  <div layout:fragment="page_content" id="page_content">
+    <form action="#" th:action="@{/proyecto/update}" method="post">
+			<div class="row">
+	      <input type="hidden" th:field="*{proyecto.id}"/>
+	      <input type="hidden" th:field="*{proyecto.estado}"/>
+				<div class="col-md-12">
+		      <div class="form-group">
+		        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
+		        <input type="text" class="form-control form-control-lg" placeholder="Título del proyecto ha inscribir..." th:field="*{proyecto.titulo}" required></input>
+		        <span th:if="${#fields.hasErrors('proyecto.titulo')}" th:errors="*{proyecto.titulo}"></span>
+		      </div>
+		      <div class="form-group">
+		        <label for="descripcion">Resumen ejecutivo</label>
+		        <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{proyecto.descripcion}" rows="10" required></textarea>
+		        <span th:if="${#fields.hasErrors('proyecto.descripcion')}" th:errors="*{proyecto.descripcion}"></span>
+		      </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+		      <div class="form-group push-right">
+		        <input type="submit" class="btn btn-primary btn-lg-btn-block" value="Actualizar Proyecto"/>
+		      </div>
+				</div>
+			</div>
+    </form>
+  </div>
+  <th:block layout:fragment="scripts">
+      <script type="text/javascript">
+      </script>
+  </th:block>
+</html>

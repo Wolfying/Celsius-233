@@ -1,0 +1,34 @@
+<html layout:decorate="~{layout}">
+  <head>
+    <title>Nuevo Proyecto</title>
+  </head>
+  <th:block layout:fragment="breadcrumb">
+    <li class="breadcrumb-item"><a href="/proyecto/list">Listado</a></li>
+    <li class="breadcrumb-item active">Nuevo</li>
+  </th:block>
+  <div layout:fragment="page_content" id="page_content">
+    <form action="#" th:action="@{/proyecto/create}" th:object="${proyecto}" method="post">
+      <ul>
+        <li th:each="err : ${#fields.errors('titulo')}" th:text="${err}" />
+        <li th:each="err : ${#fields.errors('descripcion')}" th:text="${err}" />
+      </ul>
+      <input type="hidden" name="estado" th:value="${{estado_inicial}}" />
+
+      <div class="form-group">
+        <label class="col-form-label col-form-label-lg" for="titulo">Titulo de Proyecto: </label>
+        <input type="text" class="form-control form-control-lg" placeholder="..." th:field="*{titulo}" required></input>
+        <span th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}"></span>
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Resumen ejecutivo</label>
+        <textarea class="form-control" placeholder="Breve descripción del proyecto..." th:field="*{descripcion}" rows="10" required></textarea>
+        <span th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+      </div>
+      <input type="submit" class="btn btn-primary" value="Registrar proyecto"></input>
+    </form>
+  </div>
+  <th:block layout:fragment="scripts">
+      <script type="text/javascript">
+      </script>
+  </th:block>
+</html>
