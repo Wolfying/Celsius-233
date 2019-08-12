@@ -17,7 +17,7 @@ public class UsuarioProyecto extends Auditable<String> {
 //	private UsuarioProyectoId id;
 	
 	@Id
-  @GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Usuario usuario;

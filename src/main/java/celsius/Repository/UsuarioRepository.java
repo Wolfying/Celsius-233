@@ -23,6 +23,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 		@Query("SELECT u FROM Usuario u, UsuarioProyecto up WHERE u = up.usuario AND up.proyecto = :proyecto")
 		List<Usuario> findUsuariosProyecto(@Param("proyecto") Proyecto proyecto);
 
-		@Query("SELECT u FROM Usuario u WHERE u NOT IN (SELECT up FROM UsuarioProyecto up WHERE up.proyecto = :proyecto)")
+		@Query("SELECT u FROM Usuario u WHERE u NOT IN (SELECT up.usuario FROM UsuarioProyecto up WHERE up.proyecto = :proyecto)")
 		List<Usuario> findUsuarioNoProyecto(@Param("proyecto") Proyecto proyecto);
 }

@@ -304,9 +304,8 @@ public class ProyectoController {
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al crear comentario.");
       }
-      Long id = comentario.getProyecto().getId();
-      if (id != null) {
-        return "redirect:/proyecto/index/"+id;
+      if (comentario.getProyecto() != null) {
+        return "redirect:/proyecto/index/"+comentario.getProyecto().getId();
       }
       return "redirect:/proyecto/list";
     }
@@ -320,9 +319,8 @@ public class ProyectoController {
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al crear resultado.");
       }
-      Long id = resultado.getProyecto().getId();
-      if (id != null) {
-        return "redirect:/proyecto/index/"+id;
+      if (resultado.getProyecto() != null) {
+        return "redirect:/proyecto/index/"+resultado.getProyecto().getId();
       }
       return "redirect:/proyecto/list";
     }
@@ -336,9 +334,8 @@ public class ProyectoController {
       } else {
         MessageHelper.addErrorAttribute(ra, "Error al agregar miembro.");
       }
-      Long id = usuarioProyecto.getProyecto().getId();
-      if (id != null) {
-        return "redirect:/proyecto/index/"+id;
+      if (usuarioProyecto.getProyecto() != null) {
+        return "redirect:/proyecto/index/"+usuarioProyecto.getProyecto().getId();
       }
       return "redirect:/proyecto/list";
     }
