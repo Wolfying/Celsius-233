@@ -50,7 +50,7 @@ public class Proyecto extends Auditable<String> {
 //		@OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
 //		private List<UsuarioProyecto> usuarios = new ArrayList<>();
 
-    @OneToMany(mappedBy = "proyecto")
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
     private Set<UsuarioProyecto> usuarioProyectos = new HashSet<UsuarioProyecto>();
     
     

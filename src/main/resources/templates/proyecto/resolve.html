@@ -29,8 +29,9 @@
 			          <label
 			            th:each="ESTADO : ${T(celsius.Model.Proyecto.Estado).values()}"
 			            th:for="${#ids.next('estado')}"
+			            th:if="${proyecto.estado != ESTADO}"
 			            th:classappend="${proyecto.estado == ESTADO} ? ('btn btn-outline-'+${ESTADO.etiqueta}+' active') : ('btn btn-outline-'+${ESTADO.etiqueta})">
-			            <input type="radio"th:name="ESTADO" th:field="*{proyecto.estado}" th:text="${ESTADO.nombre}" th:value="${{ESTADO}}" />
+			            <input type="radio" th:name="ESTADO" th:field="*{proyecto.estado}" th:text="${ESTADO.nombre}" th:value="${{ESTADO}}" required/>
 			            <span th:if="${#fields.hasErrors('proyecto.estado')}" th:errors="*{proyecto.estado}"></span>
 			          </label>
 	        		</div>
